@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html,
+#app {
+   @apply h-full;
+}
+
+#app {
+   display: flex;
+   flex-direction: column;
+}
+
+html {
+   font-weight: 600;
+   font-family: Nunito;
+}
+
+.logo {
+   background-image: url('/app/layout/logo/logo.jpg');
+   background-size: cover;
+   display: block;
+   height: 60px;
+   width: 200px;
+}
+
+.text-reset {
+   font-size: 16px;
+   font-weight: 600;
+}
+
+.price-marker-shadow {
+   box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 0px 1px, rgba(0, 0, 0, 0.28) 0px 1px 5px;
+}

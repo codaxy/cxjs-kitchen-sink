@@ -1,0 +1,23 @@
+.cxm-help-placement-below {
+   position: relative;
+
+   .cxb-validationerror.cxm-block {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      max-width: 100%;
+      min-width: 100px;
+      color: red;
+      background: white;
+      line-height: 1.1;
+      padding: 1px;
+      border-radius: $cx-default-border-radius;
+      border-top-left-radius: 0;
+      font-size: 12px;
+      z-index: 1;
+   }
+}
+
+.cxe-labelstoplayout-label {
+   padding-top: 12px;
+}

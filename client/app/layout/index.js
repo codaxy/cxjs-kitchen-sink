@@ -33,6 +33,13 @@ export default (
                      />
 
                      <ModuleLink
+                        icon="fa-user-tie"
+                        href="~/crm"
+                        name="CRM"
+                        description="Track leads, close opportunities, manage customers, etc."
+                     />
+
+                     <ModuleLink
                         icon="fa-tasks"
                         href="~/issues"
                         name="Issue Tracker"

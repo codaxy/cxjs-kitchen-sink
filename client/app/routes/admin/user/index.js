@@ -16,12 +16,13 @@ export default (
                <span visible-expr="{$route.id} != 'new'">Edit</span>
             </div>
          </Toolbar>
-         <div class="border-t">
+         <div class="border-t flex flex-grow">
             <LoadingOverlay
-               style="max-width: 700px; min-height: 200px"
-               class="px-4 py-2"
+               style="width: 600px;"
+               class="px-4 py-2 border-r"
                status-bind="$page.status"
                error-bind="$page.error"
+               onRetry="onLoad"
             >
                <div class="flex border-b p-4">
                   <div>
@@ -57,6 +58,7 @@ export default (
                   </AsyncButton>
                </div>
             </LoadingOverlay>
+            <div class="flex-grow bg-gray-100" />
          </div>
       </div>
    </cx>

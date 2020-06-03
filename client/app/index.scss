@@ -5,6 +5,7 @@ $cx-use-box-line-height-fix: false;
 $cx-default-box-padding: 8px;
 $cx-default-icon-size: 14px;
 $cx-default-border-radius: 4px;
+$cx-default-checkbox-size: 18px;
 
 @import '~cx/src/variables';
 
@@ -76,6 +77,44 @@ $cx-std-field-state-style-map: cx-deep-map-merge(
          background-color: rgba(red, 0.05),
       ),
       read-only: (
+         background-color: white,
+      ),
+   )
+);
+
+$cx-textarea-state-style-map: cx-deep-map-merge(
+   $cx-textarea-state-style-map,
+   (
+      default: (
+         background-color: #edf2f7,
+         border-radius: 3px,
+         box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075),
+      ),
+      focus: (
+         box-shadow: 0 0 2px gray,
+         border-color: gray,
+         background-color: white,
+      ),
+      error: (
+         background-color: rgba(red, 0.05),
+      ),
+      read-only: (
+         background-color: white,
+      ),
+   )
+);
+
+$cx-checkbox-state-style-map: cx-deep-map-merge(
+   $cx-checkbox-state-style-map,
+   (
+      default: (
+         background-color: #edf2f7,
+         border-radius: 3px,
+         box-shadow: inset 0 1px 2px rgba(27, 31, 35, 0.075),
+      ),
+      focus: (
+         box-shadow: 0 0 2px gray,
+         border-color: gray,
          background-color: white,
       ),
    )

@@ -2,7 +2,7 @@ import { Link, Icon } from 'cx/widgets';
 
 export const Sidebar = ({ children }) => (
    <cx>
-      <div class="w-64 border-r py-4 px-4">{children}</div>
+      <div class="w-64 border-r py-2 px-4">{children}</div>
    </cx>
 );
 

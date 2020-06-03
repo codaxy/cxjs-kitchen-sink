@@ -6,6 +6,7 @@ import Controller from './Controller';
 import { LoadingOverlay } from '../../../components/LoadingOverlay';
 import ResetPassword from './reset-password';
 import { getSearchQueryPredicate } from 'cx/util';
+import { SearchField } from '../../../components/SearchField';
 
 const toolbarItems = (
    <cx>
@@ -48,17 +49,7 @@ export default (
    <cx>
       <div class="flex flex-col flex-grow" controller={Controller}>
          <Toolbar>
-            <TextField
-               value={{ bind: '$page.filter.query', debounce: 300 }}
-               placeholder="Search users..."
-               inputClass="bg-gray-200 rounded-full focus:bg-white"
-               inputStyle="padding-top: 5px; padding-bottom: 5px; padding-left: 28px"
-               icon="fa-search"
-               class="w-48 h-auto"
-               inputAttrs={{
-                  autoComplete: 'off',
-               }}
-            />
+            <SearchField value={{ bind: '$page.filter.query', debounce: 300 }} placeholder="Search users..." />
             {toolbarItems}
          </Toolbar>
 

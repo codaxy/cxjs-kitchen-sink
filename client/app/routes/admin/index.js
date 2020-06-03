@@ -22,6 +22,10 @@ export default (
             route="+/users/:id"
             onLoadContent={() => import(/* webpackChunkName: 'admin' */ './user').then((m) => m.default)}
          />
+         <AsyncSandboxedRoute
+            route="+/roles"
+            onLoadContent={() => import(/* webpackChunkName: 'admin' */ './roles').then((m) => m.default)}
+         />
       </div>
    </cx>
 );

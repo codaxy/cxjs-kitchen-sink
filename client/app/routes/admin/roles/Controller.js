@@ -1,9 +1,23 @@
-import { GET, DELETE } from '../../../api/util/methods';
+import { GET, DELETE, POST, PUT } from '../../../api/util/methods';
 import { History } from 'cx/ui';
 
 export default {
    onInit() {
       this.onLoad(true);
+
+      this.addTrigger('selection', ['$page.selection', '$page.data'], (selection, roles) => {
+         let data =
+            selection == 'new'
+               ? {
+                    permissions: [],
+                 }
+               : roles.find((r) => r.id == selection);
+
+         this.store.set('$page.editor', {
+            visible: !!data,
+            data,
+         });
+      });
    },
 
    async onLoad(skipLoading) {
@@ -29,6 +43,27 @@ export default {
          showErrorToast(err, 'Failed to delete role');
       } finally {
          this.onLoad();
+      }
+   },
+
+   onAdd() {
+      this.store.set('$page.selection', 'new');
+   },
+
+   async onSave(e, { store }) {
+      store.set('visited', true);
+      let { data, invalid } = store.getData();
+      if (invalid) return;
+      try {
+         if (!data.id) {
+            data = await POST(`roles`, data);
+         } else {
+            await PUT(`roles/${data.id}`, data);
+         }
+         await this.invokeParentMethod('onLoad', !!data.id);
+         this.store.set('$page.selection', data.id);
+      } catch (err) {
+         showErrorToast(err);
       }
    },
 };

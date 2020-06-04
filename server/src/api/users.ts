@@ -18,6 +18,19 @@ function getOrderBy(params) {
    };
 }
 
+function readRoles(user): any {
+   user.user_role = {
+      set: user.roles.map((r) => ({
+         userId_role_id: {
+            role_id: r.id,
+            userId: user.id,
+         },
+      })),
+   };
+   delete user.roles;
+   return user;
+}
+
 registerAPI((server) => {
    server.get('/api/users', async (req, res) => {
       let data = await prisma.user.findMany({
@@ -31,8 +44,18 @@ registerAPI((server) => {
          where: {
             id: req.params.id,
          },
+         include: {
+            user_role: { include: { role: { select: { name: true } } } },
+         },
       });
-      send(res, 200, cleanPassword(data));
+
+      let result: any = { ...data };
+      result.roles = data.user_role.map((ur) => ({
+         id: ur.role_id,
+         name: ur.role.name,
+      }));
+      delete result.user_role;
+      send(res, 200, cleanPassword(result));
    });
 
    server.delete('/api/users/:id', async (req, res) => {
@@ -45,14 +68,13 @@ registerAPI((server) => {
    });
 
    server.post('/api/users', async (req, res) => {
-      let data = await prisma.user.create({
-         data: {
-            ...req.body,
-            id: uuid(),
-            created_time: new Date().toISOString(),
-         },
+      let data = readRoles({
+         ...req.body,
+         id: uuid(),
+         created_time: new Date().toISOString(),
       });
-      send(res, 200, cleanPassword(data));
+      let user = await prisma.user.create({ data });
+      send(res, 200, cleanPassword(user));
    });
 
    server.post('/api/users/:id/password', async (req, res) => {
@@ -69,14 +91,14 @@ registerAPI((server) => {
    });
 
    server.put('/api/users/:id', async (req, res) => {
-      let data = await prisma.user.update({
+      let data = readRoles(req.body);
+      console.log(data);
+      let user = await prisma.user.update({
          where: {
             id: req.params.id,
          },
-         data: {
-            ...req.body,
-         },
+         data,
       });
-      send(res, 200, cleanPassword(data));
+      send(res, 200, cleanPassword(user));
    });
 });

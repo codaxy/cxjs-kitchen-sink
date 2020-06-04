@@ -1,9 +1,10 @@
 import { LabelsLeftLayout, History } from 'cx/ui';
-import { Button, FieldGroup, Icon, Link, TextField, MenuItem } from 'cx/widgets';
+import { Button, FieldGroup, Icon, Link, TextField, MenuItem, LookupField } from 'cx/widgets';
 import { Toolbar } from '../../../components/Toolbar';
 import Controller from './Controller';
 import { AsyncButton } from '../../../components/AsyncButton';
 import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { GET } from '../../../api/util/methods';
 
 export default (
    <cx>
@@ -26,8 +27,8 @@ export default (
             >
                <div class="flex border-b p-4">
                   <div>
-                     <div class="">Core</div>
-                     <p class="text-xs text-gray-600">Login information</p>
+                     <div class="">User</div>
+                     <p class="text-xs text-gray-600">Profile information</p>
                   </div>
                   <div class="flex-grow" />
                   <div>
@@ -41,6 +42,17 @@ export default (
                               class="w-64"
                            />
                            <TextField value-bind="$page.data.display_name" label="Display" required class="w-64" />
+                           <LookupField
+                              records-bind="$page.data.roles"
+                              label="Roles"
+                              style="width: 256px"
+                              multiple
+                              onQuery={() => GET('roles')}
+                              fetchAll
+                              cacheAll
+                              optionTextField="name"
+                              valueTextField="name"
+                           />
                         </LabelsLeftLayout>
                      </FieldGroup>
                   </div>

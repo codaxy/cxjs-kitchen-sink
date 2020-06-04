@@ -10,14 +10,17 @@ import {
    FieldGroup,
    TextArea,
    Checkbox,
+   PrivateStore,
+   Repeater,
 } from 'cx/widgets';
-import { KeySelection, History, LabelsLeftLayout } from 'cx/ui';
+import { KeySelection, History, LabelsLeftLayout, computable } from 'cx/ui';
 import '../../../util/formatting/relativetime';
 import Controller from './Controller';
 import { LoadingOverlay } from '../../../components/LoadingOverlay';
 import { getSearchQueryPredicate } from 'cx/util';
 import { SearchField } from '../../../components/SearchField';
 import { AsyncButton } from '../../../components/AsyncButton';
+import { Permission, permissionGroups } from './permissions';
 
 const toolbarItems = (
    <cx>
@@ -52,26 +55,44 @@ export default (
             {toolbarItems}
          </Toolbar>
          <div class="flex-grow flex border-t">
-            <LoadingOverlay status-bind="$page.status" error-bind="$page.error" onRetry="onLoad" className="border-r">
+            <LoadingOverlay
+               status-bind="$page.status"
+               error-bind="$page.error"
+               onRetry="onLoad"
+               className="border-r"
+               style="width: 300px"
+            >
                <Grid
                   scrollable
-                  mod="fixed-layout"
                   sortField-bind="$page.sort.field"
                   sortDirection-bind="$page.sort.direction"
                   buffered
                   filterParams-bind="$page.filter.query"
                   onCreateFilter={(query) => {
                      let sp = getSearchQueryPredicate(query);
-                     return (record) => sp(record.display_name) || sp(record.email);
+                     return (record) => sp(record.name) || sp(record.description);
                   }}
                   emptyText="There is no data matching the given search criteria."
                   columns={[
                      {
                         field: 'name',
-                        header: 'Role',
+                        header: { text: 'Role', style: 'border-top: none; border-right: none' },
                         sortable: true,
-                        resizable: true,
-                        defaultWidth: 300,
+                        items: (
+                           <cx>
+                              <div text-bind="$record.name" class="text-base font-bold" />
+                              <div
+                                 text-bind="$record.description"
+                                 class="text-xs text-gray-600"
+                                 visible-expr="!!{$record.description}"
+                              />
+                              <div
+                                 text="No description"
+                                 class="text-xs text-gray-500"
+                                 visible-expr="!{$record.description}"
+                              />
+                           </cx>
+                        ),
                      },
                   ]}
                   class="h-full"
@@ -96,71 +117,85 @@ export default (
                   onRowDoubleClick="onEdit"
                />
             </LoadingOverlay>
-            <div class="flex-grow border-r px-4 py-2" style="max-width: 550px">
-               <div class="flex border-b p-4">
-                  <div>
-                     <div class="">Role</div>
-                     <p class="text-xs text-gray-600"></p>
-                  </div>
-                  <div class="ml-auto">
-                     <FieldGroup invalid-bind="$page.invalid" visited-bind="$page.visited">
-                        <LabelsLeftLayout>
-                           <TextField
-                              value-bind="$page.data.email"
-                              label="Name"
-                              required
-                              autoFocus-expr="{$route.id} == 'new'"
-                              class="w-64"
-                           />
-                           <TextArea value-bind="$page.data.description" label="Description" class="w-64" />
-                        </LabelsLeftLayout>
-                     </FieldGroup>
-                  </div>
-               </div>
-               <div class="border-b p-4 flex">
-                  <div>
-                     <div class="">Permissions</div>
-                     <p class="text-xs text-gray-600"></p>
-                  </div>
-                  <div class="ml-auto text-sm inline-block">
-                     <div class="text-base mb-2">Administration</div>
-                     <div class="flex items-center w-64">
-                        View users
-                        <Checkbox class="ml-auto" />
+            <div class="flex-grow border-r px-4 py-2" style="max-width: 550px" visible-expr="!!{$page.editor.visible}">
+               <PrivateStore data={{ data: { bind: '$page.editor.data' }, visible: { bind: '$page.editor.visible' } }}>
+                  <div class="flex border-b p-4">
+                     <div>
+                        <div class="">Role</div>
+                        <p class="text-xs text-gray-600"></p>
                      </div>
-                     <div class="flex items-center w-64">
-                        Create/edit user
-                        <Checkbox class="ml-auto" />
-                     </div>
-                     <div class="flex items-center w-64">
-                        Delete user
-                        <Checkbox class="ml-auto" />
-                     </div>
-                     <div class="flex items-center w-64">
-                        Reset password
-                        <Checkbox class="ml-auto" />
-                     </div>
-                     <div class="flex items-center w-64">
-                        Manage Roles
-                        <Checkbox class="ml-auto" />
+                     <div class="ml-auto">
+                        <FieldGroup invalid-bind="invalid" visited-bind="visited">
+                           <LabelsLeftLayout>
+                              <TextField
+                                 value-bind="data.name"
+                                 label="Name"
+                                 required
+                                 autoFocus-expr="!{data.id}"
+                                 class="w-64"
+                              />
+                              <TextArea value-bind="data.description" label="Description" class="w-64" />
+                           </LabelsLeftLayout>
+                        </FieldGroup>
                      </div>
                   </div>
-               </div>
-               <div class="px-4 py-5 text-right">
-                  <Button
-                     onClick={() => {
-                        History.pushState({}, null, '~/admin/users');
-                     }}
-                  >
-                     Cancel
-                  </Button>
-                  <AsyncButton class="ml-2" mod="primary" onClick="onSave">
-                     Save
-                  </AsyncButton>
-               </div>
+                  <div class="border-b p-4 flex">
+                     <div>
+                        <div class="">Permissions</div>
+                        <p class="text-xs text-gray-600"></p>
+                     </div>
+                     <div class="ml-auto text-sm inline-block">
+                        <Repeater records={getPermissionGroups()} recordAlias="$pg">
+                           <div class="text-base mb-2" text-bind="$pg.name" />
+                           <Repeater records-bind="$pg.permissions">
+                              <div class="flex items-center w-64">
+                                 <span text-bind="$record.description" />
+                                 <Checkbox
+                                    class="ml-auto"
+                                    value={{
+                                       get: computable('data.permissions', '$record.code', (p, code) =>
+                                          p.includes(code)
+                                       ),
+                                       set: (value, { store }) => {
+                                          let code = store.get('$record.code');
+                                          store.update('data.permissions', (p) => p.filter((x) => x != code));
+                                          if (value) store.update('data.permissions', (p) => [...p, code]);
+                                       },
+                                    }}
+                                 />
+                              </div>
+                           </Repeater>
+                        </Repeater>
+                     </div>
+                  </div>
+                  <div class="px-4 py-5 text-right">
+                     <Button
+                        onClick={(e, { store }) => {
+                           store.set('visible', false);
+                        }}
+                     >
+                        Cancel
+                     </Button>
+                     <AsyncButton class="ml-2" mod="primary" onClick="onSave">
+                        Save
+                     </AsyncButton>
+                  </div>
+               </PrivateStore>
             </div>
             <div class="flex-grow bg-gray-100" />
          </div>
       </div>
    </cx>
 );
+
+export function getPermissionGroups() {
+   let groups = [];
+   for (let module in permissionGroups) {
+      let permissions = [];
+      for (let resource in Permission[module]) {
+         for (let perm in Permission[module][resource]) permissions.push(Permission[module][resource][perm]);
+      }
+      groups.push({ name: permissionGroups[module], permissions });
+   }
+   return groups;
+}

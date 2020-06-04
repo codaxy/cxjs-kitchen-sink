@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { registerAPI } from './register';
 import * as send from '@polka/send-type';
 import { v4 as uuid } from 'uuid';
-import { compare as comparePassword, hash } from 'bcrypt';
 
 const prisma = new PrismaClient();
 
@@ -34,8 +33,8 @@ registerAPI((server) => {
       let data = await prisma.role.create({
          data: {
             ...req.body,
+            permissions: { set: req.body.permissions },
             id: uuid(),
-            created_time: new Date().toISOString(),
          },
       });
       send(res, 200, data);
@@ -48,6 +47,7 @@ registerAPI((server) => {
          },
          data: {
             ...req.body,
+            permissions: { set: req.body.permissions },
          },
       });
       send(res, 200, data);

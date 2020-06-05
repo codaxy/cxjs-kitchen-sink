@@ -14,7 +14,8 @@
       "typescript": "^3.8.3"
    },
    "scripts": {
-      "start": "nodemon"
+      "start": "nodemon",
+      "introspect": "prisma introspect & prisma generate"
    },
    "dependencies": {
       "@polka/send-type": "^0.5.2",

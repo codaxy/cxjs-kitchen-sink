@@ -4,6 +4,7 @@ import { AsyncSandboxedRoute } from '../../components/AsyncSandboxedRoute';
 
 export default (
    <cx>
+      <div putInto="module">Administration</div>
       <div class="flex flex-grow">
          <RedirectRoute url-bind="url" route="+" redirect="+/users" />
          <Sidebar>

@@ -16,7 +16,11 @@ export default (
             <div class="border-r h-6 self-center" />
             <Menu horizontal class="m-2">
                <Submenu>
-                  <div class="cursor-pointer py-2 px-5 flex-grow-1 w-48 text-xl">Administration</div>
+                  <div class="cursor-pointer py-2 px-5 flex-grow-1 w-48 text-xl">
+                     <ContentPlaceholder name="module">
+                        <div class="text-gray-500">Module</div>
+                     </ContentPlaceholder>
+                  </div>
                   <Menu putInto="dropdown" class="p-2" itemPadding={false}>
                      <ModuleLink
                         icon="fa-user"

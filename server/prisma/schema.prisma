@@ -7,6 +7,60 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model ledger {
+  description    String?
+  id             String           @id
+  name           String?
+  year           Int
+  ledger_account ledger_account[]
+  ledger_page    ledger_page[]
+}
+
+model ledger_account {
+  by_party        Boolean
+  code            String
+  description     String
+  entries_allowed Boolean
+  id              String         @id
+  ledger_id       String?
+  ledger          ledger?        @relation(fields: [ledger_id], references: [id])
+  ledger_entry    ledger_entry[]
+
+  @@unique([ledger_id, code], name: "ledger_account_ledger_id_code_uindex")
+}
+
+model ledger_entry {
+  credit            Float?
+  date              DateTime
+  debit             Float?
+  description       String?
+  id                String         @id
+  index             Int?
+  ledger_account_id String
+  ledger_page_id    String
+  party_id          String?
+  ledger_account    ledger_account @relation(fields: [ledger_account_id], references: [id])
+  ledger_page       ledger_page    @relation(fields: [ledger_page_id], references: [id])
+  party             party?         @relation(fields: [party_id], references: [id])
+}
+
+model ledger_page {
+  date         DateTime
+  description  String
+  id           String         @id
+  ledger_id    String
+  number       Int
+  ledger       ledger         @relation(fields: [ledger_id], references: [id])
+  ledger_entry ledger_entry[]
+}
+
+model party {
+  date         DateTime
+  id           String         @id
+  name         String
+  ledger_entry ledger_entry[]
+}
+
 model role {
   description String?
   id          String      @id
@@ -27,9 +81,9 @@ model user {
 
 model user_role {
   role_id String
-  userId  String
+  user_id String
   role    role   @relation(fields: [role_id], references: [id])
-  user    user   @relation(fields: [userId], references: [id])
+  user    user   @relation(fields: [user_id], references: [id])
 
-  @@id([userId, role_id])
+  @@id([user_id, role_id])
 }

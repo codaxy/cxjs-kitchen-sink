@@ -3,6 +3,10 @@ import { History } from 'cx/ui';
 
 export default {
    onInit() {
+      this.store.init('$page.sort', {
+         field: 'created_time',
+         direction: 'DESC',
+      });
       this.onLoad(true);
    },
 

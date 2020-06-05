@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, user_roleCreateManyWithoutUserInput, user_roleUpdateManyWithoutUserInput } from '@prisma/client';
 import { registerAPI } from './register';
 import * as send from '@polka/send-type';
 import { v4 as uuid } from 'uuid';
@@ -18,15 +18,43 @@ function getOrderBy(params) {
    };
 }
 
-function readRoles(user): any {
-   user.user_role = {
-      set: user.roles.map((r) => ({
-         userId_role_id: {
-            role_id: r.id,
-            userId: user.id,
+async function readRoles(user) {
+   let role_ids = user.roles?.map((r) => r.id) ?? [];
+   const user_id = user.id;
+   if (user.id) {
+      let dbroles = await prisma.user_role.findMany({
+         where: {
+            user_id,
          },
-      })),
-   };
+      });
+      let op: user_roleUpdateManyWithoutUserInput = {
+         delete: dbroles
+            .filter((r) => !role_ids.includes(r.role_id))
+            .map((r) => ({
+               user_id_role_id: {
+                  role_id: r.role_id,
+                  user_id,
+               },
+            })),
+         create: role_ids
+            .filter((rid) => !dbroles.find((r) => r.role_id == rid))
+            .map((role_id) => ({
+               role: { connect: { id: role_id } },
+            })),
+      };
+      user.user_role = op;
+   } else {
+      let op: user_roleCreateManyWithoutUserInput = {
+         create: role_ids.map((role_id) => ({
+            role: {
+               connect: {
+                  id: role_id,
+               },
+            },
+         })),
+      };
+      user.user_role = op;
+   }
    delete user.roles;
    return user;
 }
@@ -68,12 +96,14 @@ registerAPI((server) => {
    });
 
    server.post('/api/users', async (req, res) => {
-      let data = readRoles({
-         ...req.body,
-         id: uuid(),
-         created_time: new Date().toISOString(),
+      let data = await readRoles(req.body);
+      let user = await prisma.user.create({
+         data: {
+            ...data,
+            id: uuid(),
+            created_time: new Date().toISOString(),
+         },
       });
-      let user = await prisma.user.create({ data });
       send(res, 200, cleanPassword(user));
    });
 
@@ -91,7 +121,7 @@ registerAPI((server) => {
    });
 
    server.put('/api/users/:id', async (req, res) => {
-      let data = readRoles(req.body);
+      let data = await readRoles(req.body);
       console.log(data);
       let user = await prisma.user.update({
          where: {

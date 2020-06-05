@@ -1,5 +1,6 @@
 import { POST, GET, PUT } from '../../../api/util/methods';
 import { History } from 'cx/ui';
+import { showErrorToast } from '../../../components/toasts';
 
 export default {
    onInit() {
@@ -29,14 +30,17 @@ export default {
       let { id } = this.store.get('$route');
 
       if (invalid) return;
+      try {
+         if (id == 'new') {
+            let result = await POST('users', data);
+            id = result.id;
+         } else {
+            await PUT(`users/${id}`, data);
+         }
 
-      if (id == 'new') {
-         let result = await POST('users', data);
-         id = result.id;
-      } else {
-         await PUT(`users/${id}`, data);
+         History.pushState({}, null, `~/admin/users?select=${id}`);
+      } catch (err) {
+         showErrorToast(err);
       }
-
-      History.pushState({}, null, `~/admin/users?select=${id}`);
    },
 };

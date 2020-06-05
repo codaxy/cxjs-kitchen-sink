@@ -11,9 +11,17 @@ async function processResponse(response) {
 }
 
 async function checkOk(r) {
-   if (!r.ok) throw Error(r.statusText);
-   //TODO: Extract error from JSON payload
-   return r;
+   if (r.ok) return r;
+   let data;
+   try {
+      data = await r.json();
+   } catch {}
+   if (data?.error) {
+      let err = new Error(data.error);
+      err.statusText = r.statusText;
+      throw err;
+   }
+   throw Error(r.statusText);
 }
 
 let apiBaseUrl = '/api/';

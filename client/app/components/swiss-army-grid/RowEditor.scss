@@ -1,0 +1,45 @@
+.cxb-roweditor {
+   position: absolute;
+   width: 1px;
+   right: 0;
+   bottom: -1px;
+   top: -1px;
+   z-index: 10;
+   box-sizing: border-box;
+   background: white;
+   box-shadow: 0 3px 5px rgba(black, 0.3);
+   display: flex;
+   align-items: center;
+
+   .cxe-grid-row-number::after {
+      counter-increment: none;
+   }
+}
+
+.cxe-roweditor-floater {
+   position: absolute;
+   padding: 2px 6px 6px;
+   background-color: inherit;
+   box-shadow: 0 3px 5px rgba(black, 0.3);
+   top: 100%;
+
+   &.cxs-place-up {
+      bottom: 100%;
+      top: auto;
+      padding-top: 6px;
+      padding-bottom: 2px;
+   }
+}
+
+.cxe-roweditor-editor-wrapper {
+   padding: 1px;
+   box-sizing: border-box;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+
+   &.cxs-no-editor {
+      padding-left: 8px;
+      padding-right: 8px;
+   }
+}

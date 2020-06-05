@@ -164,6 +164,31 @@ $cx-window-footer-state-style-map: cx-deep-map-merge(
    )
 );
 
+$cx-input-tag-state-style-map: cx-deep-map-merge(
+   $cx-input-tag-state-style-map,
+   (
+      default: (
+         background-color: white,
+         border-color: #ddd,
+         border-width: 1px,
+         padding: 4px 2px,
+      ),
+   )
+);
+
+@debug $cx-input-tag-clear-state-style-map;
+
+$cx-input-tag-clear-state-style-map: cx-deep-map-merge(
+   $cx-input-tag-clear-state-style-map,
+   (
+      default: (
+         right: 4px,
+      ),
+   )
+);
+
+@debug $cx-input-tag-clear-state-style-map;
+
 @import '~cx/src/index';
 
 .cxe-overlay-shadow {

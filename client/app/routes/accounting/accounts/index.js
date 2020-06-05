@@ -1,40 +1,36 @@
-import { Toolbar } from '../../../components/Toolbar';
+import { KeySelection, LabelsLeftLayout } from 'cx/ui';
 import {
    Button,
+   FieldGroup,
+   Grid,
    Menu,
    MenuItem,
-   Grid,
-   TextField,
    openContextMenu,
-   Link,
-   FieldGroup,
-   TextArea,
-   Checkbox,
    PrivateStore,
-   Repeater,
+   TextArea,
+   TextField,
 } from 'cx/widgets';
-import { KeySelection, History, LabelsLeftLayout, computable } from 'cx/ui';
+import { AsyncButton } from '../../../components/AsyncButton';
+import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { Toolbar } from '../../../components/Toolbar';
 import '../../../util/formatting/relativetime';
 import Controller from './Controller';
-import { LoadingOverlay } from '../../../components/LoadingOverlay';
-import { getSearchQueryPredicate } from 'cx/util';
-import { SearchField } from '../../../components/SearchField';
-import { AsyncButton } from '../../../components/AsyncButton';
-import { Permission, permissionGroups } from './permissions';
+import { SwissArmyGrid } from '../../../components/swiss-army-grid/SwissArmyGrid';
+import { createRowEditorRecord } from '../../../components/swiss-army-grid/RowEditor';
 
 const toolbarItems = (
    <cx>
       <MenuItem onClick="onAdd" autoClose icon="fa-plus">
-         Add Role
+         Add Ledger
       </MenuItem>
       <MenuItem
          autoClose
          disabled-expr="!{$page.selection}"
          onClick="onDelete"
          icon="fa-trash"
-         confirm="Are you sure that you want to delete the selected role?"
+         confirm="Are you sure that you want to delete the selected ledger?"
       >
-         Delete Role
+         Delete Ledger
       </MenuItem>
       <MenuItem
          autoClose
@@ -50,36 +46,28 @@ const toolbarItems = (
 export default (
    <cx>
       <div class="flex flex-col flex-grow" controller={Controller}>
-         <Toolbar>
-            <SearchField value={{ bind: '$page.filter.query', debounce: 300 }} placeholder="Search roles..." />
-            {toolbarItems}
-         </Toolbar>
+         <Toolbar>{toolbarItems}</Toolbar>
          <div class="flex-grow flex border-t">
             <LoadingOverlay
                status-bind="$page.status"
                error-bind="$page.error"
                onRetry="onLoad"
                className="border-r"
-               style="width: 300px"
+               style="width: 350px"
             >
                <Grid
                   scrollable
                   sortField-bind="$page.sort.field"
                   sortDirection-bind="$page.sort.direction"
-                  filterParams-bind="$page.filter.query"
-                  onCreateFilter={(query) => {
-                     let sp = getSearchQueryPredicate(query);
-                     return (record) => sp(record.name) || sp(record.description);
-                  }}
-                  emptyText="There is no data matching the given search criteria."
+                  emptyText="No data."
                   columns={[
                      {
                         field: 'name',
-                        header: { text: 'Role', style: 'border-top: none; border-right: none' },
+                        header: { text: 'Ledger', style: 'border-top: none;' },
                         sortable: true,
                         items: (
                            <cx>
-                              <div text-bind="$record.name" class="text-base font-bold" />
+                              <div text-bind="$record.name" class="text-base font-bold mb-1" />
                               <div
                                  text-bind="$record.description"
                                  class="text-xs text-gray-600"
@@ -92,6 +80,12 @@ export default (
                               />
                            </cx>
                         ),
+                     },
+                     {
+                        field: 'year',
+                        header: { text: 'Year', style: 'border-top: none; border-right: none' },
+                        align: 'center',
+                        sortable: true,
                      },
                   ]}
                   class="h-full"
@@ -114,13 +108,15 @@ export default (
                      )
                   }
                   onRowDoubleClick="onEdit"
+                  defaultSortField="year"
+                  defaultSortDirection="DESC"
                />
             </LoadingOverlay>
             <div class="flex-grow border-r px-4 py-2" style="max-width: 550px" visible-expr="!!{$page.editor.visible}">
                <PrivateStore data={{ data: { bind: '$page.editor.data' }, visible: { bind: '$page.editor.visible' } }}>
                   <div class="flex border-b p-4">
                      <div>
-                        <div class="">Role</div>
+                        <div class="">Ledger</div>
                         <p class="text-xs text-gray-600"></p>
                      </div>
                      <div class="ml-auto">
@@ -133,39 +129,43 @@ export default (
                                  autoFocus-expr="!{data.id}"
                                  class="w-64"
                               />
-                              <TextArea value-bind="data.description" label="Description" class="w-64" />
+                              <TextField value-bind="data.year" label="Year" required class="w-64" />
+                              <TextArea value-bind="data.description" label="Description" class="w-64" rows={4} />
                            </LabelsLeftLayout>
                         </FieldGroup>
                      </div>
                   </div>
-                  <div class="border-b p-4 flex">
+                  <div class="border-b p-4">
                      <div>
-                        <div class="">Permissions</div>
+                        <div class="">Accounts</div>
                         <p class="text-xs text-gray-600"></p>
                      </div>
-                     <div class="ml-auto text-sm inline-block">
-                        <Repeater records={getPermissionGroups()} recordAlias="$pg">
-                           <div class="text-base mb-2" text-bind="$pg.name" />
-                           <Repeater records-bind="$pg.permissions">
-                              <div class="flex items-center w-64">
-                                 <span text-bind="$record.description" />
-                                 <Checkbox
-                                    class="ml-auto"
-                                    value={{
-                                       get: computable('data.permissions', '$record.code', (p, code) =>
-                                          p.includes(code)
-                                       ),
-                                       set: (value, { store }) => {
-                                          let code = store.get('$record.code');
-                                          store.update('data.permissions', (p) => p.filter((x) => x != code));
-                                          if (value) store.update('data.permissions', (p) => [...p, code]);
-                                       },
-                                    }}
-                                 />
-                              </div>
-                           </Repeater>
-                        </Repeater>
-                     </div>
+                     <SwissArmyGrid
+                        border={false}
+                        records-bind="data.accounts"
+                        rowEditable
+                        scrollable
+                        buffered
+                        style="min-height: 200px;"
+                        columns={[
+                           { field: 'code', header: 'Code', editor: true, required: true },
+                           { field: 'description', header: 'Description', editor: true, required: true },
+                           { field: 'by_party', header: 'Party', type: 'boolean', editor: true },
+                           { field: 'entries_allowed', header: 'Allowed', type: 'boolean', editor: true },
+                        ]}
+                     />
+                     <Button
+                        class="mt-4"
+                        mod="hollow"
+                        onClick={(e, { store }) => {
+                           store.update('data.accounts', (accounts) => [
+                              ...(accounts || []),
+                              createRowEditorRecord({}),
+                           ]);
+                        }}
+                     >
+                        Add
+                     </Button>
                   </div>
                   <div class="px-4 py-5 text-right">
                      <Button
@@ -186,15 +186,3 @@ export default (
       </div>
    </cx>
 );
-
-export function getPermissionGroups() {
-   let groups = [];
-   for (let module in permissionGroups) {
-      let permissions = [];
-      for (let resource in Permission[module]) {
-         for (let perm in Permission[module][resource]) permissions.push(Permission[module][resource][perm]);
-      }
-      groups.push({ name: permissionGroups[module], permissions });
-   }
-   return groups;
-}

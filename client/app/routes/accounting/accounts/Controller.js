@@ -27,6 +27,7 @@ export default {
       try {
          let data = await GET('ledgers');
          this.store.set('$page.data', data);
+         this.store.init('$page.selection', data[0]?.id);
          status.set('ok');
       } catch (err) {
          status.set('error');

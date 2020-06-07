@@ -176,8 +176,6 @@ $cx-input-tag-state-style-map: cx-deep-map-merge(
    )
 );
 
-@debug $cx-input-tag-clear-state-style-map;
-
 $cx-input-tag-clear-state-style-map: cx-deep-map-merge(
    $cx-input-tag-clear-state-style-map,
    (
@@ -186,8 +184,6 @@ $cx-input-tag-clear-state-style-map: cx-deep-map-merge(
       ),
    )
 );
-
-@debug $cx-input-tag-clear-state-style-map;
 
 @import '~cx/src/index';
 

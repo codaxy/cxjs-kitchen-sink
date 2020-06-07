@@ -3,7 +3,7 @@ import { Button, Menu, MenuItem, Grid, TextField, openContextMenu, Link } from '
 import { KeySelection, History } from 'cx/ui';
 import '../../../util/formatting/relativetime';
 import Controller from './Controller';
-import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { LoadingMask } from '../../../components/LoadingMask';
 import ResetPassword from './reset-password';
 import { getSearchQueryPredicate } from 'cx/util';
 import { SearchField } from '../../../components/SearchField';
@@ -55,7 +55,7 @@ export default (
 
          <ResetPassword visible-bind="$page.resetPassword" />
 
-         <LoadingOverlay status-bind="$page.status" error-bind="$page.error" onRetry="onLoad" className="flex-grow">
+         <LoadingMask status-bind="$page.status" error-bind="$page.error" onRetry="onLoad" className="flex-grow">
             <Grid
                scrollable
                mod="fixed-layout"
@@ -113,7 +113,7 @@ export default (
                }
                onRowDoubleClick="onEdit"
             />
-         </LoadingOverlay>
+         </LoadingMask>
       </div>
    </cx>
 );

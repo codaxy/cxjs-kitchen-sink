@@ -1,0 +1,58 @@
+.cxb-loadingmask {
+   position: relative;
+}
+.cxe-loadingmask-loading {
+   position: absolute;
+   left: 0;
+   right: 0;
+   top: 0;
+   bottom: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   opacity: 0;
+
+   opacity: 0;
+   pointer-events: none;
+   background: rgba(white, 0.7);
+   transition: opacity 400ms;
+
+   &.cxs-loading {
+      opacity: 1;
+      pointer-events: all;
+      transition: none;
+   }
+}
+
+.cxe-loadingmask-loading-icon {
+   width: 24px;
+   height: 24px;
+   font-size: 24px;
+   line-height: 24px;
+   margin-right: 8px;
+}
+
+.cxe-loadingmask-error {
+   position: absolute;
+   left: 0;
+   right: 0;
+   top: 0;
+   bottom: 0;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: rgba(white, 0.7);
+   text-align: center;
+   padding: 24px;
+}
+
+.cxe-loadingmask-error-title {
+   color: rgb(194, 0, 0);
+   margin-bottom: 12px;
+   font-size: 20px;
+}
+
+.cxe-loadingmask-error-message {
+   margin-bottom: 12px;
+   font-size: 1rem;
+}

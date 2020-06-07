@@ -2,7 +2,7 @@ import LogoUrl from '../../layout/logo/logo.jpg';
 import { LabelsTopLayout } from 'cx/ui';
 import { TextField, PrivateStore, Button, ValidationGroup } from 'cx/widgets';
 import Controller from './Controller';
-import '../../components/fields';
+import '../../components/theme/fields';
 
 export default (
    <cx>

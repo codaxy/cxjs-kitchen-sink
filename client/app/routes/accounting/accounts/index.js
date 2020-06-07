@@ -11,12 +11,12 @@ import {
    TextField,
 } from 'cx/widgets';
 import { AsyncButton } from '../../../components/AsyncButton';
-import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { LoadingMask } from '../../../components/LoadingMask';
+import { createRowEditorRecord } from '../../../components/swiss-army-grid/RowEditor';
+import { SwissArmyGrid } from '../../../components/swiss-army-grid/SwissArmyGrid';
 import { Toolbar } from '../../../components/Toolbar';
 import '../../../util/formatting/relativetime';
 import Controller from './Controller';
-import { SwissArmyGrid } from '../../../components/swiss-army-grid/SwissArmyGrid';
-import { createRowEditorRecord } from '../../../components/swiss-army-grid/RowEditor';
 
 const toolbarItems = (
    <cx>
@@ -48,9 +48,9 @@ export default (
       <div class="flex flex-col flex-grow" controller={Controller}>
          <Toolbar>{toolbarItems}</Toolbar>
          <div class="flex-grow flex border-t">
-            <LoadingOverlay
+            <LoadingMask
                status-bind="$page.status"
-               error-bind="$page.error"
+               errorMessage-bind="$page.error"
                onRetry="onLoad"
                className="border-r"
                style="width: 350px"
@@ -111,15 +111,19 @@ export default (
                   defaultSortField="year"
                   defaultSortDirection="DESC"
                />
-            </LoadingOverlay>
-            <div class="flex-grow border-r px-4 py-2" style="max-width: 550px" visible-expr="!!{$page.editor.visible}">
+            </LoadingMask>
+            <div
+               class="flex-grow-100 border-r px-4 py-2 flex flex-col"
+               style="max-width: 850px"
+               visible-expr="!!{$page.editor.visible}"
+            >
                <PrivateStore data={{ data: { bind: '$page.editor.data' }, visible: { bind: '$page.editor.visible' } }}>
                   <div class="flex border-b p-4">
-                     <div>
+                     <div class="w-48">
                         <div class="">Ledger</div>
                         <p class="text-xs text-gray-600"></p>
                      </div>
-                     <div class="ml-auto">
+                     <div>
                         <FieldGroup invalid-bind="invalid" visited-bind="visited">
                            <LabelsLeftLayout>
                               <TextField
@@ -135,39 +139,56 @@ export default (
                         </FieldGroup>
                      </div>
                   </div>
-                  <div class="border-b p-4">
-                     <div>
-                        <div class="">Accounts</div>
-                        <p class="text-xs text-gray-600"></p>
-                     </div>
-                     <SwissArmyGrid
-                        border={false}
-                        records-bind="data.accounts"
-                        rowEditable
-                        scrollable
-                        buffered
-                        style="min-height: 200px;"
-                        columns={[
-                           { field: 'code', header: 'Code', editor: true, required: true },
-                           { field: 'description', header: 'Description', editor: true, required: true },
-                           { field: 'by_party', header: 'Party', type: 'boolean', editor: true },
-                           { field: 'entries_allowed', header: 'Allowed', type: 'boolean', editor: true },
-                        ]}
-                     />
+
+                  <div class="flex items-center p-4">
+                     <div class="">Accounts</div>
                      <Button
-                        class="mt-4"
+                        class="ml-4"
                         mod="hollow"
+                        icon="fa-plus"
                         onClick={(e, { store }) => {
                            store.update('data.accounts', (accounts) => [
-                              ...(accounts || []),
                               createRowEditorRecord({}),
+                              ...(accounts || []),
                            ]);
                         }}
                      >
                         Add
                      </Button>
                   </div>
-                  <div class="px-4 py-5 text-right">
+
+                  <SwissArmyGrid
+                     border={false}
+                     records-bind="data.accounts"
+                     rowEditable
+                     scrollable
+                     buffered
+                     style="min-height: 200px;"
+                     sortField="code"
+                     sortDirection="ASC"
+                     class="flex-grow mx-2"
+                     mod={['condensed', 'ellipsis']}
+                     columns={[
+                        {
+                           field: 'code',
+                           header: { text: 'Code', style: 'border-left-color: #ddd' },
+                           editor: true,
+                           required: true,
+                           width: 100,
+                        },
+                        { field: 'description', header: 'Description', editor: true, required: true },
+                        { field: 'by_party', header: 'Party', type: 'boolean', editor: true, width: 80 },
+                        {
+                           field: 'entries_allowed',
+                           header: 'Allowed',
+                           type: 'boolean',
+                           editor: true,
+                           width: 80,
+                        },
+                     ]}
+                  />
+
+                  <div class="px-4 py-5 text-right border-t">
                      <Button
                         onClick={(e, { store }) => {
                            store.set('visible', false);
@@ -181,7 +202,7 @@ export default (
                   </div>
                </PrivateStore>
             </div>
-            <div class="flex-grow bg-gray-100" />
+            <div class="bg-gray-100 flex-grow" />
          </div>
       </div>
    </cx>

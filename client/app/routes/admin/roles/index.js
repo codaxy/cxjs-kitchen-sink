@@ -16,7 +16,7 @@ import {
 import { KeySelection, History, LabelsLeftLayout, computable } from 'cx/ui';
 import '../../../util/formatting/relativetime';
 import Controller from './Controller';
-import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { LoadingMask } from '../../../components/LoadingMask';
 import { getSearchQueryPredicate } from 'cx/util';
 import { SearchField } from '../../../components/SearchField';
 import { AsyncButton } from '../../../components/AsyncButton';
@@ -55,7 +55,7 @@ export default (
             {toolbarItems}
          </Toolbar>
          <div class="flex-grow flex border-t">
-            <LoadingOverlay
+            <LoadingMask
                status-bind="$page.status"
                error-bind="$page.error"
                onRetry="onLoad"
@@ -115,7 +115,7 @@ export default (
                   }
                   onRowDoubleClick="onEdit"
                />
-            </LoadingOverlay>
+            </LoadingMask>
             <div class="flex-grow border-r px-4 py-2" style="max-width: 550px" visible-expr="!!{$page.editor.visible}">
                <PrivateStore data={{ data: { bind: '$page.editor.data' }, visible: { bind: '$page.editor.visible' } }}>
                   <div class="flex border-b p-4">

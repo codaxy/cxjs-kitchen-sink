@@ -1,0 +1,11 @@
+@import 'fields';
+
+.cxb-grid.cxm-condensed .cxe-grid-data td {
+   padding-top: 3px;
+   padding-bottom: 3px;
+}
+
+.cxb-grid.cxm-ellipsis .cxe-grid-data td {
+   overflow: hidden;
+   text-overflow: ellipsis;
+}

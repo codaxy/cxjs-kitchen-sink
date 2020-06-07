@@ -8,11 +8,11 @@ import { buildColumnMenus } from './buildColumnMenus';
 import { createRowEditor } from './RowEditor';
 import { mapColumns } from './mapColumns';
 import { LookupOptionsCache } from './LookupOptionsCache';
-import { LoadingOverlay } from '../LoadingOverlay';
+import { LoadingSignal } from '../LoadingMask';
 
 const defaultColumnOptions = {
-   resizable: true,
-   sortable: true,
+   resizable: false,
+   sortable: false,
    headerClass: null,
    editorMod: null,
 };
@@ -20,10 +20,6 @@ const defaultColumnOptions = {
 export const SwissArmyGrid = createFunctionalComponent(
    ({
       print,
-      status,
-      errorMessage,
-      onRetry,
-      onCancel,
       columns,
       scrollable,
       buffered,
@@ -58,109 +54,100 @@ export const SwissArmyGrid = createFunctionalComponent(
 
       return (
          <cx>
-            <LoadingOverlay
-               mod={loadingMod}
-               status={status}
-               loading={lookupsLoading}
-               errorMessage={errorMessage}
-               onRetry={onRetry}
-               onCancel={onCancel}
-            >
-               <ContentResolver
-                  params={{ columnsList: columns, print, ...params }}
-                  onResolve={({ columnsList, print, ...params }, { store }) => {
-                     let lookupOptionsCache = new LookupOptionsCache({ store, recordAlias, storage: lookupStorage });
-                     let columns = columnsList;
-                     let options = { ...defaultColumnOptions, ...columnOptions };
-                     let processColumn = (col) => {
-                        let result = { ...col };
-                        if (!isObject(result.header)) result.header = { text: result.header };
-                        if (isBinding(columnWidths))
-                           result.header.width = { bind: `${columnWidths.bind}.${result.field}` };
-                        if (options.resizable && result.header.resizable == null) result.header.resizable = true;
-                        if (options.sortable && result.sortable == null) result.sortable = true;
-                        if (options.headerClass) result.header.class = options.headerClass;
-                        if (options.defaultWidth && !result.defaultWidth) result.defaultWidth = options.defaultWidth;
+            <LoadingSignal loading={lookupsLoading} />
+            <ContentResolver
+               params={{ columnsList: columns, print, ...params }}
+               onResolve={({ columnsList, print, ...params }, { store }) => {
+                  let lookupOptionsCache = new LookupOptionsCache({ store, recordAlias, storage: lookupStorage });
+                  let columns = columnsList;
+                  let options = { ...defaultColumnOptions, ...columnOptions };
+                  let processColumn = (col) => {
+                     let result = { ...col };
+                     if (!isObject(result.header)) result.header = { text: result.header };
+                     if (isBinding(columnWidths))
+                        result.header.width = { bind: `${columnWidths.bind}.${result.field}` };
+                     if (options.resizable && result.header.resizable == null) result.header.resizable = true;
+                     if (options.sortable && result.sortable == null) result.sortable = true;
+                     if (options.headerClass) result.header.class = options.headerClass;
+                     if (options.defaultWidth && !result.defaultWidth) result.defaultWidth = options.defaultWidth;
 
-                        resolveColumnTypeAndEditor(result, {
-                           recordAlias,
-                           print,
-                           lookupOptionsCache,
-                           rowEditable,
-                           onSaveRecord,
-                           editorMod: options.editorMod,
-                           cellEditable: props.cellEditable,
-                        });
-                        return result;
-                     };
+                     resolveColumnTypeAndEditor(result, {
+                        recordAlias,
+                        print,
+                        lookupOptionsCache,
+                        rowEditable,
+                        onSaveRecord,
+                        editorMod: options.editorMod,
+                        cellEditable: props.cellEditable,
+                     });
+                     return result;
+                  };
 
-                     if (onGetColumns) columns = onGetColumns(columns, { print, params }).map(processColumn);
-                     else if (onGetColumnsConfig) {
-                        let config = onGetColumnsConfig({ print, params });
-                        columns = mapColumns(columns, config, processColumn);
-                     } else columns = columns.map(processColumn);
+                  if (onGetColumns) columns = onGetColumns(columns, { print, params }).map(processColumn);
+                  else if (onGetColumnsConfig) {
+                     let config = onGetColumnsConfig({ print, params });
+                     columns = mapColumns(columns, config, processColumn);
+                  } else columns = columns.map(processColumn);
 
-                     if (isBinding(filter)) {
-                        let filterProps = buildColumnMenus(columns, {
-                           filterPath: filter.bind,
-                           lookupOptionsCache,
-                        });
-                        columns = filterProps.columns;
-                        props.onCreateFilter = filterProps.onCreateFilter;
-                        props.filterParams = filterProps.filterParams;
-                        className = getClassNameObject(className);
-                        className['cxs-filtered'] = computable(filter.bind, isNonEmptyObjectDeep);
-                     }
+                  if (isBinding(filter)) {
+                     let filterProps = buildColumnMenus(columns, {
+                        filterPath: filter.bind,
+                        lookupOptionsCache,
+                     });
+                     columns = filterProps.columns;
+                     props.onCreateFilter = filterProps.onCreateFilter;
+                     props.filterParams = filterProps.filterParams;
+                     className = getClassNameObject(className);
+                     className['cxs-filtered'] = computable(filter.bind, isNonEmptyObjectDeep);
+                  }
 
-                     if (rowEditable && !print) {
-                        let { onRowKeyDown, onRowDoubleClick, onRowClick, buttons } = createRowEditor({
-                           columns,
-                           records,
-                           onSaveRecord,
-                           onDeleteRecord,
-                           isRecordEditable,
-                           onRowClick: props.onRowClick,
-                        });
-                        columns = [
-                           ...columns,
-                           {
-                              header: {
-                                 style: 'width: 10px',
-                              },
-                              style: 'width: 10px; overflow: visible; position: relative',
-                              items: buttons,
+                  if (rowEditable && !print) {
+                     let { onRowKeyDown, onRowDoubleClick, onRowClick, buttons } = createRowEditor({
+                        columns,
+                        records,
+                        onSaveRecord,
+                        onDeleteRecord,
+                        isRecordEditable,
+                        onRowClick: props.onRowClick,
+                     });
+                     columns = [
+                        ...columns,
+                        {
+                           header: {
+                              style: 'width: 10px;',
                            },
-                        ];
+                           style: 'width: 10px; overflow: visible; position: relative',
+                           items: buttons,
+                        },
+                     ];
 
-                        props.onRowClick = onRowClick;
-                        props.onRowDoubleClick = onRowDoubleClick;
-                        props.onRowKeyDown = onRowKeyDown;
-                     }
+                     props.onRowClick = onRowClick;
+                     props.onRowDoubleClick = onRowDoubleClick;
+                     props.onRowKeyDown = onRowKeyDown;
+                  }
 
-                     return (
-                        <cx>
-                           <Grid
-                              records={records}
-                              style={!print ? style : null}
-                              className={className}
-                              class={rowEditable ? 'row-editable' : ''}
-                              scrollable={print ? false : scrollable}
-                              buffered={print ? false : buffered}
-                              columns={columns}
-                              preSorters={
-                                 rowEditable && [{ direction: 'ASC', value: { expr: '{$record.$editor.add} ? 0 : 1' } }]
-                              }
-                              scrollResetParams={
-                                 rowEditable &&
-                                 isBinding(records) && { expr: `{${records.bind}.0.$editor.scrollReset}` }
-                              }
-                              {...props}
-                           />
-                        </cx>
-                     );
-                  }}
-               />
-            </LoadingOverlay>
+                  return (
+                     <cx>
+                        <Grid
+                           records={records}
+                           style={!print ? style : null}
+                           className={className}
+                           class={rowEditable ? 'row-editable' : ''}
+                           scrollable={print ? false : scrollable}
+                           buffered={print ? false : buffered}
+                           columns={columns}
+                           preSorters={
+                              rowEditable && [{ direction: 'ASC', value: { expr: '{$record.$editor.add} ? 0 : 1' } }]
+                           }
+                           scrollResetParams={
+                              rowEditable && isBinding(records) && { expr: `{${records.bind}.0.$editor.scrollReset}` }
+                           }
+                           {...props}
+                        />
+                     </cx>
+                  );
+               }}
+            />
          </cx>
       );
    }
@@ -187,6 +174,7 @@ function resolveColumnTypeAndEditor(column, options) {
    let valuePath = `${recordAlias}.${field}`;
 
    if (type == 'boolean' && !column.children && !column.items) {
+      if (!column.align) column.align = 'center';
       column.items = (
          <cx>
             <Checkbox

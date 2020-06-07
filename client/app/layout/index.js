@@ -49,13 +49,6 @@ export default (
                         name="Issue Tracker"
                         description="Report bugs, track issues, create sprints, track progress..."
                      />
-
-                     <ModuleLink
-                        icon="fa-chart-bar"
-                        href="~/crypto-exchange"
-                        name="Crypto Exchange"
-                        description="Watch prices, enter orders, check trades, withdraw funds, etc."
-                     />
                   </Menu>
                </Submenu>
             </Menu>

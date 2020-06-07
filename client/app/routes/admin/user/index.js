@@ -3,7 +3,7 @@ import { Button, FieldGroup, Icon, Link, TextField, MenuItem, LookupField } from
 import { Toolbar } from '../../../components/Toolbar';
 import Controller from './Controller';
 import { AsyncButton } from '../../../components/AsyncButton';
-import { LoadingOverlay } from '../../../components/LoadingOverlay';
+import { LoadingMask } from '../../../components/LoadingMask';
 import { GET } from '../../../api/util/methods';
 
 export default (
@@ -18,7 +18,7 @@ export default (
             </div>
          </Toolbar>
          <div class="border-t flex flex-grow">
-            <LoadingOverlay
+            <LoadingMask
                style="width: 600px;"
                class="px-4 py-2 border-r"
                status-bind="$page.status"
@@ -69,7 +69,7 @@ export default (
                      Save
                   </AsyncButton>
                </div>
-            </LoadingOverlay>
+            </LoadingMask>
             <div class="flex-grow bg-gray-100" />
          </div>
       </div>

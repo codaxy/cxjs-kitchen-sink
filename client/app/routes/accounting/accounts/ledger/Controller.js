@@ -1,6 +1,7 @@
 import { POST, GET, PUT } from '../../../../api/util/methods';
 import { History } from 'cx/ui';
 import { showErrorToast } from '../../../../components/toasts';
+import { diffArrays } from 'cx/data';
 
 export default {
    onInit() {
@@ -15,6 +16,7 @@ export default {
          status.set('loading');
          let id = this.store.get('id');
          let data = await GET(`ledgers/${id}`);
+         this.store.set('original', data);
          this.store.set('data', data);
          status.set('ok');
       } catch (err) {
@@ -26,12 +28,18 @@ export default {
    async onSave() {
       this.store.set('visited', true);
 
-      let { data, invalid, id } = this.store.getData();
+      let { data, invalid, id, original } = this.store.getData();
 
       if (invalid) return;
+
+      let body = {
+         ...data,
+         accounts: diffArrays(original?.accounts || [], data.accounts || []),
+      };
+
       try {
          if (id == 'new') {
-            let { id } = await POST('ledgers', data);
+            let { id } = await POST('ledgers', body);
             this.store.set('id', id);
          } else {
             await PUT(`ledgers/${id}`, data);

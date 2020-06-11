@@ -46,6 +46,8 @@ export default {
          }
       } catch (err) {
          showErrorToast(err);
+      } finally {
+         await this.invokeParentMethod('onMasterLoad', id != 'new');
       }
    },
 };

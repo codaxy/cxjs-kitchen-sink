@@ -1,23 +1,16 @@
-import { GET, DELETE, POST, PUT } from '../../../api/util/methods';
-import { History } from 'cx/ui';
+import { DELETE, GET, POST, PUT } from '../../../api/util/methods';
 
 export default {
    onInit() {
       this.onLoad(true);
+   },
 
-      this.addTrigger('selection', ['$page.selection', '$page.data'], (selection, roles) => {
-         let data =
-            selection == 'new'
-               ? {
-                    year: new Date().getFullYear(),
-                 }
-               : roles.find((r) => r.id == selection);
+   onAdd() {
+      this.store.set('$page.selection', 'new');
+   },
 
-         this.store.set('$page.editor', {
-            visible: !!data,
-            data,
-         });
-      });
+   onMasterLoad(skipLoading) {
+      return this.onLoad(skipLoading);
    },
 
    async onLoad(skipLoading) {
@@ -38,8 +31,9 @@ export default {
    async onDelete(e, { store }) {
       try {
          this.store.set('$page.status', 'loading');
-         await DELETE(`ledgers/${store.get('$page.selection')}`);
+         let selection = this.store.get('$page.selection');
          this.store.delete('$page.selection');
+         await DELETE(`ledgers/${selection}`);
       } catch (err) {
          showErrorToast(err, 'Failed to delete');
       } finally {

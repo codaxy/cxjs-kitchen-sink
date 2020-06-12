@@ -25,6 +25,11 @@ export default (
             route="+/accounts"
             onLoadContent={() => import(/* webpackChunkName: 'accounting' */ './accounts').then((m) => m.default)}
          />
+
+         <AsyncSandboxedRoute
+            route="+/journal"
+            onLoadContent={() => import(/* webpackChunkName: 'accounting' */ './journal').then((m) => m.default)}
+         />
       </div>
    </cx>
 );

@@ -1,10 +1,10 @@
 # CxJS Enterprise Demo
 
-The purpose of this project is to demonstrate capabilities of CxJS on a real-world like application. CxJS is an advanced JavaScript framework designed for building large enterprise applications which commonly feature forms, tables, and charts.
+The purpose of this project is to illustrate how CxJS can be used to quicly build enterprise applications. CxJS is an advanced JavaScript framework designed for building applications which commonly feature forms, tables, and charts.
 
 A live demo of this application can be found at https://enterprise-kitchen-sink.cxjs.io.
 
-The following modules are currently implemented:
+The following modules are implemented:
 
 - Administration
 - Accounting
@@ -19,9 +19,11 @@ The application consists of three parts:
 
 ### Setting Up
 
-Before starting the application on your computer you should create a new Postgres database and use [this script](todo) to populate it. After that find the `.sample.env` configuration file in `server/prisma` and copy it to `.env`. Inside the newly create file, set the connection string to the database created in the previous step.
+Before starting the application on your computer, you should create a new Postgres database and use [the seed script](todo) to populate it. After that find the `.sample.env` configuration file in `server/prisma` and rename it to `.env`. Inside the newly created file, set the connection string to the database created in the previous step.
 
-To start the server open the terminal and run:
+### Running
+
+To start the server, open the terminal and run:
 
 ```
 cd server
@@ -29,7 +31,7 @@ yarn install
 yarn start
 ```
 
-To start the client open the terminal and run:
+To start the client, open the terminal and run:
 
 ```
 cd client
@@ -39,4 +41,4 @@ yarn start
 
 ## License
 
-This project is available under the [MIT license](LICENSE.md), however please note that CxJS requires paid licenses for commercial distribution.
+This project is available under the [MIT license](LICENSE.md). However please note that CxJS requires paid licenses for commercial distribution.

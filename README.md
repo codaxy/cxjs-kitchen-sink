@@ -31,7 +31,7 @@ yarn install
 yarn start
 ```
 
-To start the client, open the terminal and run:
+To start the client, open another terminal and run:
 
 ```
 cd client

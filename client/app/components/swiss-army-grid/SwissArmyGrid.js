@@ -166,6 +166,7 @@ function resolveColumnTypeAndEditor(column, options) {
          else if (format == 'date' || format.startsWith('date;')) type = 'date';
          else if (format == 'dt' || format.startsWith('dt;')) type = 'datetime';
          else if (format == 'datetime' || format.startsWith('datetime;')) type = 'datetime';
+         else if (format == 'relativetime') type = 'date';
       }
    }
 

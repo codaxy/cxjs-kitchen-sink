@@ -7,6 +7,7 @@ export const SearchField = (props) => (
          inputStyle="padding-top: 5px; padding-bottom: 5px; padding-left: 28px"
          icon="fa-search"
          class="w-48 h-auto"
+         showClear
          inputAttrs={{
             autoComplete: 'off',
          }}

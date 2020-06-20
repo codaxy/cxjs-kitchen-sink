@@ -1,0 +1,32 @@
+.cxe-grid-col-header.cxs-filtered {
+   font-style: italic;
+
+   .cxe-grid-col-header-filter {
+      opacity: 1;
+   }
+}
+
+.cxe-grid-col-header-tool {
+   right: 3px;
+   top: 3px;
+   font-style: normal;
+   text-transform: none;
+}
+
+.cxb-menuitem.cxs-open .cxe-grid-col-header-filter {
+   opacity: 1;
+}
+
+.cxe-grid-col-header:hover {
+   .cxe-grid-col-header-filter {
+      opacity: 1;
+   }
+}
+
+.cxe-grid-col-header-filter {
+   transform: scale(0.6);
+   padding: 1px 3px;
+   opacity: 0;
+}
+
+@import './RowEditor';

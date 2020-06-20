@@ -7,12 +7,13 @@ import { LoadingMask } from '../../../components/LoadingMask';
 
 import { getSearchQueryPredicate } from 'cx/util';
 import { SearchField } from '../../../components/SearchField';
+import { SwissArmyGrid } from '../../../components/swiss-army-grid/SwissArmyGrid';
 
 const toolbarItems = (
    <cx>
       <MenuItem
          onClick={() => {
-            History.pushState({}, null, '~/admin/parties/new');
+            History.pushState({}, null, '~/accounting/parties/new');
          }}
          autoClose
          icon="fa-plus"
@@ -46,12 +47,12 @@ export default (
    <cx>
       <div class="flex flex-col flex-grow" controller={Controller}>
          <Toolbar>
-            <SearchField value={{ bind: '$page.filter.query', debounce: 300 }} placeholder="Search parties..." />
+            <SearchField value={{ bind: '$page.filter.name.value', debounce: 300 }} placeholder="Search parties..." />
             {toolbarItems}
          </Toolbar>
 
          <LoadingMask status-bind="$page.status" error-bind="$page.error" onRetry="onLoad" className="flex-grow">
-            <Grid
+            <SwissArmyGrid
                scrollable
                mod="fixed-layout"
                sortField-bind="$page.sort.field"
@@ -60,31 +61,52 @@ export default (
                filterParams-bind="$page.filter.query"
                onCreateFilter={(query) => {
                   let sp = getSearchQueryPredicate(query);
-                  return (record) => sp(record.display_name) || sp(record.email);
+                  return (record) => sp(record.name) || sp(record.email);
                }}
                emptyText="There is no data matching the given search criteria."
+               filter-bind="$page.filter"
                columns={[
                   {
-                     field: 'email',
-                     header: 'Email',
+                     field: 'name',
+                     header: 'Name',
                      sortable: true,
                      resizable: true,
                      defaultWidth: 300,
                   },
-                  { field: 'display_name', header: 'Name', sortable: true, resizable: true, defaultWidth: 300 },
                   {
-                     field: 'created_time',
-                     header: 'Created',
+                     field: 'date',
+                     header: 'Since',
                      sortable: true,
                      defaultWidth: 150,
                      format: 'relativetime',
                   },
                   {
-                     field: 'last_login_time',
-                     header: 'Last Login',
+                     field: 'email',
+                     header: 'Email',
                      sortable: true,
-                     defaultWidth: 150,
-                     format: 'relativetime|never',
+                     resizable: true,
+                     defaultWidth: 200,
+                  },
+                  {
+                     field: 'website',
+                     header: 'Website',
+                     sortable: true,
+                     resizable: true,
+                     defaultWidth: 200,
+                  },
+                  {
+                     field: 'country',
+                     header: 'Country',
+                     sortable: true,
+                     resizable: true,
+                     defaultWidth: 200,
+                  },
+                  {
+                     field: 'city',
+                     header: 'City',
+                     sortable: true,
+                     resizable: true,
+                     defaultWidth: 200,
                   },
                ]}
                class="h-full"

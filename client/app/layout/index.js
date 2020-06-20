@@ -21,7 +21,7 @@ export default (
                         <div class="text-gray-500">Module</div>
                      </ContentPlaceholder>
                   </div>
-                  <Menu putInto="dropdown" class="p-2" itemPadding={false}>
+                  <Menu putInto="dropdown" itemPadding={false}>
                      <ModuleLink
                         icon="fa-user"
                         href="~/admin"

@@ -30,6 +30,10 @@ export default (
             onLoadContent={() => import(/* webpackChunkName: 'accounting' */ './parties').then((m) => m.default)}
          />
          <AsyncSandboxedRoute
+            route="+/parties/:id"
+            onLoadContent={() => import(/* webpackChunkName: 'accounting' */ './party').then((m) => m.default)}
+         />
+         <AsyncSandboxedRoute
             route="+/journal"
             onLoadContent={() => import(/* webpackChunkName: 'accounting' */ './journal').then((m) => m.default)}
          />

@@ -13,7 +13,7 @@ export default (
                   <div text-bind="user.email" class="text-xs text-gray-500 leading-none"></div>
                </div>
             </div>
-            <Menu putInto="dropdown" class="p-2">
+            <Menu putInto="dropdown">
                <MenuItem
                   autoClose
                   onClick={(e, { store }) => {

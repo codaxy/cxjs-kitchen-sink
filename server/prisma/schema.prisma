@@ -55,9 +55,18 @@ model ledger_page {
 }
 
 model party {
+  address1     String?
+  address2     String?
+  city         String?
+  country_code String?
   date         DateTime
+  email        String?
   id           String         @id
   name         String
+  phone        String?
+  postal_code  String?
+  tax_number   String?
+  website      String?
   ledger_entry ledger_entry[]
 }
 

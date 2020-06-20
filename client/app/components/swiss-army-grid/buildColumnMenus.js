@@ -4,6 +4,7 @@ import { getSearchQueryPredicate, Format } from 'cx/util';
 import { computable } from 'cx/ui';
 import { isNonEmptyObjectDeep } from '../../util/isNonEmptyObjectDeep';
 import { getClassNameObject } from '../../util/getClassNameObject';
+import '../theme/dropdown';
 
 const defaultDebounceTimeout = 400;
 
@@ -148,7 +149,7 @@ function getNumberFilter(field, filterPath, format, scale) {
                   },
                }}
             >
-               <Menu putInto="dropdown">
+               <Menu putInto="dropdown" class="p-2">
                   <NumberField
                      placeholder="From..."
                      value={{ bind: rangePath + '.from', debounce: defaultDebounceTimeout }}
@@ -221,7 +222,7 @@ function getDateFilter(field, filterPath, format) {
                   },
                }}
             >
-               <Menu putInto="dropdown">
+               <Menu putInto="dropdown" class="p-2">
                   <DateField
                      placeholder="From..."
                      value-bind={rangePath + '.from'}
@@ -272,11 +273,11 @@ function buildColumnMenu(column, state, options) {
    header.tool = (
       <cx>
          <div onKeyDown={stopPropagation}>
-            <Menu horizontal itemPadding="small">
-               <Submenu placement="down-left">
-                  <span class="cxe-grid-col-header-filter">
+            <Menu horizontal itemPadding={false}>
+               <Submenu placement="down-left" pad={false}>
+                  <div class="cxe-grid-col-header-filter">
                      <Icon name="fa-filter" />
-                  </span>
+                  </div>
                   <Menu putInto="dropdown">
                      <Submenu
                         text="Filter"

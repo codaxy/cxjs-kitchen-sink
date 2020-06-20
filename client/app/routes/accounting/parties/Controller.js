@@ -4,7 +4,7 @@ import { History } from 'cx/ui';
 export default {
    onInit() {
       this.store.init('$page.sort', {
-         field: 'created_time',
+         field: 'date',
          direction: 'DESC',
       });
       this.onLoad(true);
@@ -15,7 +15,7 @@ export default {
       if (skipLoading === true) status.init('loading');
       else status.set('loading');
       try {
-         let data = await GET('users');
+         let data = await GET('parties');
          this.store.set('$page.data', data);
          status.set('ok');
       } catch (err) {
@@ -25,7 +25,7 @@ export default {
    },
 
    onEdit(e, { store }) {
-      History.pushState({}, null, `~/admin/users/${store.get('$page.selection')}`);
+      History.pushState({}, null, `~/accounting/parties/${store.get('$page.selection')}`);
    },
 
    async onDelete(e, { store }) {
@@ -38,13 +38,5 @@ export default {
       } finally {
          this.onLoad();
       }
-   },
-
-   onResetPassword() {
-      let { selection, data } = this.store.get('$page');
-      let user = data.find((u) => u.id == selection);
-      this.store.set('$page.resetPassword', {
-         user,
-      });
    },
 };

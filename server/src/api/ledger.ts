@@ -9,6 +9,7 @@ import * as send from '@polka/send-type';
 import { v4 as uuid } from 'uuid';
 import { arrayDiff } from '../util/arrayDiff';
 import { DataTransformer } from '../util/DataTransformer';
+import { parse as json2csv } from 'json2csv';
 
 const prisma = new PrismaClient();
 
@@ -39,9 +40,6 @@ async function transformAccounts(ledger_id, body) {
       let remove: ledger_accountWhereUniqueInput[] = diff.removed.map((x) => ({ id: x.id }));
       body.ledger_account.delete = remove;
    }
-
-   console.log(body);
-
    return body;
 }
 
@@ -97,5 +95,21 @@ registerAPI((server) => {
          data: body,
       });
       send(res, 200, data);
+   });
+
+   server.get('/api/ledgers/:id/accounts/csv', async (req, res) => {
+      let data = await prisma.ledger_account.findMany({
+         where: {
+            ledger_id: req.params.id,
+         },
+      });
+      let accounts = new DataTransformer().removeField('ledger_id').transform(data);
+      let body = json2csv(accounts, {
+         fields: ['code', 'description', 'by_party', 'entries_allowed'],
+      });
+      send(res, 200, body, {
+         'Content-Disposition': `attachment; filename="data.csv"`,
+         'Content-Type': 'application/csv',
+      });
    });
 });

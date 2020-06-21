@@ -50,6 +50,15 @@ export default (
                   >
                      Add
                   </Button>
+                  <a
+                     mod="hollow"
+                     baseClass="button"
+                     href-tpl="~/api/ledgers/{id}/accounts/csv"
+                     target="_blank"
+                     class="ml-auto"
+                  >
+                     Export
+                  </a>
                </div>
 
                <SwissArmyGrid

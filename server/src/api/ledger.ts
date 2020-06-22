@@ -10,6 +10,9 @@ import { v4 as uuid } from 'uuid';
 import { arrayDiff } from '../util/arrayDiff';
 import { DataTransformer } from '../util/DataTransformer';
 import { parse as json2csv } from 'json2csv';
+import * as neatCSV from 'neat-csv';
+import * as Busboy from 'busboy';
+import { uid } from '../util/uid';
 
 const prisma = new PrismaClient();
 
@@ -111,5 +114,47 @@ registerAPI((server) => {
          'Content-Disposition': `attachment; filename="data.csv"`,
          'Content-Type': 'application/csv',
       });
+   });
+
+   server.post('/api/ledgers/:id/accounts/csv', async (req, res) => {
+      let accounts = [];
+      let files = [];
+      await new Promise((resolve, reject) => {
+         let busboy = new Busboy(req);
+         busboy.on('file', (field, file, name, encoding, mime) => {
+            const parse = async () => {
+               let data = await neatCSV(file);
+               accounts.push(...data);
+            };
+            files.push(parse());
+         });
+         busboy.on('finish', resolve);
+         busboy.on('error', reject);
+         req.pipe(busboy);
+      });
+
+      await Promise.all(files);
+
+      await prisma.ledger_account.deleteMany({
+         where: {
+            ledger_id: req.params.id,
+         },
+      });
+
+      await prisma.ledger.update({
+         where: { id: req.params.id },
+         data: {
+            ledger_account: {
+               create: accounts.map((acc) => ({
+                  ...acc,
+                  id: uid(),
+                  by_party: Boolean(acc.by_party),
+                  entries_allowed: Boolean(acc.entries_allowed),
+               })),
+            },
+         },
+      });
+
+      send(res, 200, { success: true });
    });
 });

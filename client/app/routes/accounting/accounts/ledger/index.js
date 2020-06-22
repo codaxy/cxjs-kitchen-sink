@@ -1,5 +1,5 @@
 import { expr, LabelsLeftLayout } from 'cx/ui';
-import { Button, FieldGroup, PrivateStore, TextArea, TextField, Sandbox, NumberField } from 'cx/widgets';
+import { Button, FieldGroup, PrivateStore, TextArea, TextField, Sandbox, NumberField, UploadButton } from 'cx/widgets';
 import { AsyncButton } from '../../../../components/AsyncButton';
 import { createRowEditorRecord } from '../../../../components/swiss-army-grid/RowEditor';
 import { SwissArmyGrid } from '../../../../components/swiss-army-grid/SwissArmyGrid';
@@ -12,7 +12,7 @@ export default (
          <PrivateStore data={{ id: { bind: '$page.selection' } }} controller={Controller}>
             <LoadingMask
                class="flex-grow-100 border-r px-4 py-2 flex flex-col"
-               style="max-width: 850px"
+               style="max-width: 850px; min-height: 0"
                status-bind="status"
                errorMessage-bind="error"
             >
@@ -59,6 +59,9 @@ export default (
                   >
                      Export
                   </a>
+                  <UploadButton mod="hollow" url-tpl="~/api/ledgers/{id}/accounts/csv">
+                     Import
+                  </UploadButton>
                </div>
 
                <SwissArmyGrid
@@ -78,16 +81,16 @@ export default (
                         header: { text: 'Code', style: 'border-left-color: #ddd' },
                         editor: true,
                         required: true,
-                        width: 100,
+                        width: 70,
                      },
-                     { field: 'description', header: 'Description', editor: true, required: true },
-                     { field: 'by_party', header: 'Party', type: 'boolean', editor: true, width: 80 },
+                     { field: 'description', header: 'Description', editor: true, required: true, width: 400 },
+                     { field: 'by_party', header: 'Party', type: 'boolean', editor: true, width: 60 },
                      {
                         field: 'entries_allowed',
-                        header: 'Allowed',
+                        header: 'Entry',
                         type: 'boolean',
                         editor: true,
-                        width: 80,
+                        width: 60,
                      },
                   ]}
                   onDeleteRecord={(e, { store }) => {

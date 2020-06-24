@@ -5,6 +5,7 @@ import { createRowEditorRecord } from '../../../../components/swiss-army-grid/Ro
 import { SwissArmyGrid } from '../../../../components/swiss-army-grid/SwissArmyGrid';
 import Controller from './Controller';
 import { LoadingMask } from '../../../../components/LoadingMask';
+import { showErrorToast, showSuccessToast } from '../../../../components/toasts';
 
 export default (
    <cx>
@@ -32,13 +33,13 @@ export default (
                               class="w-64"
                            />
                            <NumberField value-bind="data.year" label="Year" required class="w-64" format="s" />
-                           <TextArea value-bind="data.description" label="Description" class="w-64" rows={4} />
+                           <TextArea value-bind="data.description" label="Description" rows={4} style="width: 400px" />
                         </LabelsLeftLayout>
                      </FieldGroup>
                   </div>
                </div>
 
-               <div class="flex items-center p-4">
+               <div class="flex items-center px-4 py-4">
                   <div class="">Accounts</div>
                   <Button
                      class="ml-4"
@@ -59,7 +60,22 @@ export default (
                   >
                      Export
                   </a>
-                  <UploadButton mod="hollow" url-tpl="~/api/ledgers/{id}/accounts/csv">
+                  <UploadButton
+                     mod="hollow"
+                     url-tpl="~/api/ledgers/{id}/accounts/csv"
+                     onUploadStarting={(e, { store }) => {
+                        store.set('status', 'loading');
+                     }}
+                     onUploadComplete={(e, { controller }) => {
+                        showSuccessToast('Accounts have been successfully imported.');
+                        controller.onLoad();
+                     }}
+                     onUploadError={(e, { store }) => {
+                        showErrorToast('Upload failed.');
+                        console.log(e);
+                        store.set('status', 'ok');
+                     }}
+                  >
                      Import
                   </UploadButton>
                </div>

@@ -148,8 +148,8 @@ registerAPI((server) => {
                create: accounts.map((acc) => ({
                   ...acc,
                   id: uid(),
-                  by_party: Boolean(acc.by_party),
-                  entries_allowed: Boolean(acc.entries_allowed),
+                  by_party: acc.by_party.toLowerCase() == 'true',
+                  entries_allowed: acc.entries_allowed.toLowerCase() == 'true',
                })),
             },
          },

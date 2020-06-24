@@ -140,8 +140,15 @@ export function createRowEditor({
       },
       buttons: (
          <cx>
-            <FlexRow justify={!!onDeleteRecord ? 'center' : 'start'} class="grid-action-buttons">
-               <Button mod="hollow" onClick={editRow} icon="fa-edit" tooltip="Edit" onMouseDown={stopPropagation} />
+            <FlexRow justify={!!onDeleteRecord ? 'center' : 'start'} class="text-gray-600 opacity-50">
+               <Button
+                  mod="hollow"
+                  onClick={editRow}
+                  icon="fa-edit"
+                  tooltip="Edit"
+                  onMouseDown={stopPropagation}
+                  class="hover:text-black"
+               />
 
                <Button
                   mod="hollow"
@@ -158,6 +165,7 @@ export function createRowEditor({
                   }
                   icon="fa-trash"
                   tooltip="Delete"
+                  class="hover:text-black"
                />
             </FlexRow>
             <ValidationGroup visible-expr={`!!{${recordAlias}.$editor}`} invalid-bind={`${editorPath}.invalid`}>
@@ -165,7 +173,7 @@ export function createRowEditor({
                   autoFocusFirstField
                   buttons={
                      <cx>
-                        <Button onClick={cancelRowEdit} text="Cancel" style="margin: 0 5px 0 0;" />
+                        <Button onClick={cancelRowEdit} text="Cancel" class="mr-1" />
                         <Button onClick={saveRow} disabled-bind={`${editorPath}.invalid`} text="Save" />
                      </cx>
                   }

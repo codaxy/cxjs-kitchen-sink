@@ -1,4 +1,4 @@
-import { expr, LabelsLeftLayout } from 'cx/ui';
+import { expr, LabelsLeftLayout, computable } from 'cx/ui';
 import { Button, FieldGroup, PrivateStore, TextArea, TextField, Sandbox, NumberField, UploadButton } from 'cx/widgets';
 import { AsyncButton } from '../../../../components/AsyncButton';
 import { createRowEditorRecord } from '../../../../components/swiss-army-grid/RowEditor';
@@ -70,7 +70,7 @@ export default (
                   rowEditable
                   scrollable
                   buffered
-                  style="min-height: 200px;"
+                  style="flex-basis: 200px;"
                   sortField="code"
                   sortDirection="ASC"
                   class="flex-grow mx-2"
@@ -82,6 +82,9 @@ export default (
                         editor: true,
                         required: true,
                         width: 70,
+                        style: {
+                           paddingLeft: computable('$record.code', (code) => (code ? code.length * 5 : 0)),
+                        },
                      },
                      { field: 'description', header: 'Description', editor: true, required: true, width: 400 },
                      { field: 'by_party', header: 'Party', type: 'boolean', editor: true, width: 60 },

@@ -19,7 +19,7 @@ The application consists of three parts:
 
 ### Setting Up
 
-Before starting the application on your computer, you should create a new Postgres database and use [the seed script](todo) to populate it. After that find the `.sample.env` configuration file in `server/prisma` and rename it to `.env`. Inside the newly created file, set the connection string to the database created in the previous step.
+Before starting the application on your computer, you should create a new Postgres database and use [the seed SQL script](./seed/dump.sql) to populate it. After that find the `.sample.env` configuration file in `server/prisma` and rename it to `.env`. Inside the newly created file, set the connection string to the database created in the previous step.
 
 ### Running
 

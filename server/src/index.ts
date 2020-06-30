@@ -1,26 +1,17 @@
-import * as polka from 'polka';
-import { PrismaClient } from '@prisma/client';
-import { registerServer } from './api/register';
-import './api';
 import { json } from 'body-parser';
+import * as polka from 'polka';
+import './api';
+import { registerServer } from './api/register';
 
 let server = polka();
 
-server
-   .use(json())
-   .get('/', async (req, res) => {
-      let response = await fetch('http://localhost:8765/', {});
-      let text = await response.text();
-      res.end(text);
-   })
-   .get('/users/:id', async (req, res) => {
-      const prisma = new PrismaClient();
-      res.end(`User: ${req.params.id}`);
-   });
+let port = process.env.PORT || 3000;
+
+server.use(json());
 
 registerServer(server);
 
-server.listen(3000, (err) => {
+server.listen(port, (err) => {
    if (err) throw err;
-   console.log(`> Running on localhost:3000`);
+   console.log(`> Running on localhost:${port}`);
 });

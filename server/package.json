@@ -15,7 +15,8 @@
    },
    "scripts": {
       "start": "nodemon",
-      "introspect": "prisma introspect & prisma generate"
+      "introspect": "prisma introspect & prisma generate",
+      "heroku": "yarn install && ts-node src/index.ts"
    },
    "dependencies": {
       "@polka/send-type": "^0.5.2",

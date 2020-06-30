@@ -6,6 +6,6 @@
   "author": "Marko Stijak <mstijak@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "cd server && yarn start"
+    "start": "cd server && yarn heroku"
   }
 }

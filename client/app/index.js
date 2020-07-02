@@ -10,7 +10,7 @@ import './index.css';
 const store = new Store();
 
 //routing
-Url.setBaseFromScript('app*.js');
+Url.setBaseFromScript('vendor*.js');
 History.connect(store, 'url');
 
 //debug

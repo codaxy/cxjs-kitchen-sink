@@ -4,13 +4,13 @@
    "main": "index.js",
    "license": "MIT",
    "private": true,
-   "devDependencies": {
-      "@prisma/cli": "2.0.0-beta.3",
-   },
    "scripts": {
       "dev": "ts-node ./src/index.ts",
       "start": "nodemon",
       "introspect": "prisma introspect & prisma generate"
+   },
+   "devDependencies": {
+      "@prisma/cli": "2.0.0-beta.3"
    },
    "dependencies": {
       "@polka/send-type": "^0.5.2",

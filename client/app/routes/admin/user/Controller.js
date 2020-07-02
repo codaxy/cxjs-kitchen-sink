@@ -30,6 +30,7 @@ export default {
       let { id } = this.store.get('$route');
 
       if (invalid) return;
+
       try {
          if (id == 'new') {
             let result = await POST('users', data);
@@ -44,3 +45,4 @@ export default {
       }
    },
 };
+//await GET(`users/email/${data.email}`)

@@ -1,5 +1,5 @@
-import { LabelsLeftLayout, History } from 'cx/ui';
-import { Button, FieldGroup, Icon, Link, TextField, MenuItem, LookupField, LinkButton } from 'cx/widgets';
+import { LabelsLeftLayout, History , FirstVisibleChildLayout,} from 'cx/ui';
+import { Button, FieldGroup, Icon, Link, TextField, MenuItem, LookupField, LinkButton,ValidationError } from 'cx/widgets';
 import { Toolbar } from '../../../components/Toolbar';
 import Controller from './Controller';
 import { AsyncButton } from '../../../components/AsyncButton';
@@ -40,6 +40,25 @@ export default (
                               required
                               autoFocus-expr="!{$page.data.id}"
                               class="w-64"
+                              onValidate={async (v) => {
+                                 const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                                 if (!re.test(v)) {
+                                     return 'Invalid email structure.'
+                                 } else {
+                                    const exists = await GET(`users/email/${v}`) != null ? true : false;
+                                    if(exists) {
+                                       return "Email is already taken."
+                                    } else {
+                                       return false;
+                                    }
+                                 }
+                              }}
+                               help={
+                                 <div layout={FirstVisibleChildLayout}>
+                                   <ValidationError />
+                                   <Icon name="check" style="color:green" />
+                                 </div>
+                               }
                            />
                            <TextField value-bind="$page.data.display_name" label="Display" required class="w-64" />
                            <LookupField

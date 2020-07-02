@@ -11,10 +11,10 @@ export default (
             <div class="flex justify-center mb-4">
                <img src={LogoUrl} alt="logo" class="h-14" />
             </div>
-            <div class="border-2 rounded-lg pt-8 pb-10 px-8 bg-white">
-               <p class="mb-2">Sign in to Kitchen Sink</p>
-               <PrivateStore data={{ user: { bind: 'user' } }}>
-                  <ValidationGroup invalid-bind="invalid" visited-bind="visited" controller={Controller}>
+            <PrivateStore data={{ user: { bind: 'user' } }} controller={Controller}>
+               <form class="border-2 rounded-lg pt-8 pb-10 px-8 bg-white" onSubmit="onSignIn">
+                  <p class="mb-2">Sign in to Kitchen Sink</p>
+                  <ValidationGroup invalid-bind="invalid" visited-bind="visited">
                      <LabelsTopLayout columns={1} mod="stretch">
                         <TextField label="Email" value-bind="email" class="w-full" required />
                         <TextField
@@ -24,13 +24,13 @@ export default (
                            required
                            inputType="password"
                         />
-                        <Button mod="primary" class="w-full mt-4" onClick="onSignIn">
+                        <Button mod="primary" class="w-full mt-4" submit>
                            Sign In
                         </Button>
                      </LabelsTopLayout>
                   </ValidationGroup>
-               </PrivateStore>
-            </div>
+               </form>
+            </PrivateStore>
          </div>
       </div>
    </cx>

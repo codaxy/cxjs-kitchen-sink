@@ -1,5 +1,6 @@
 export default {
-   onSignIn() {
+   onSignIn(e) {
+      e.preventDefault();
       this.store.set('visited', true);
       let { email, password, invalid } = this.store.getData();
       if (invalid) return;

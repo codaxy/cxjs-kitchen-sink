@@ -6,16 +6,10 @@
    "private": true,
    "devDependencies": {
       "@prisma/cli": "2.0.0-beta.3",
-      "@prisma/client": "2.0.0-beta.3",
-      "@types/node": "^13.13.4",
-      "nodemon": "^2.0.3",
-      "polka": "^0.5.2",
-      "ts-node": "^8.9.1",
-      "typescript": "^3.8.3"
    },
    "scripts": {
-      "start": "ts-node ./src/index.ts",
-      "watch": "nodemon",
+      "dev": "ts-node ./src/index.ts",
+      "start": "nodemon",
       "introspect": "prisma introspect & prisma generate"
    },
    "dependencies": {
@@ -26,6 +20,12 @@
       "deep-equal": "^2.0.3",
       "json2csv": "^5.0.1",
       "neat-csv": "^5.2.0",
-      "uuid": "^8.1.0"
+      "uuid": "^8.1.0",
+      "polka": "^0.5.2",
+      "ts-node": "^8.9.1",
+      "typescript": "^3.8.3",
+      "@prisma/client": "2.0.0-beta.3",
+      "@types/node": "^13.13.4",
+      "nodemon": "^2.0.3"
    }
 }

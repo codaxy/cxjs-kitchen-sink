@@ -107,6 +107,48 @@ registerAPI((server) => {
       send(res, 200, cleanPassword(user));
    });
 
+   server.post('/api/users/:id', async (req, res) => {
+      let data = await readRoles(req.body);
+      let success = { msg : true };
+      let user = await prisma.user.findOne({
+         where: {
+            email: data.email,
+         }
+      });
+      if(!user) {
+         if(req.params.id == 'new') {
+            user = await prisma.user.create({
+               data: {
+                  ...data,
+                  id: uuid(),
+                  created_time: new Date().toISOString(),
+               },
+            });
+         } else {
+            user = await prisma.user.update({
+               where: {
+                  id: req.params.id,
+               },
+               data,
+            });
+         }
+      } else {
+         success = { msg : false };
+      }
+      // let user = await prisma.user.upsert({
+      //    where: {
+      //       email: req.params.email,
+      //    },
+      //    update: data,
+      //    create: {
+      //       ...data,
+      //       id: uuid(),
+      //       created_time: new Date().toISOString(),
+      //    },
+      // });
+      send(res, 200, success);
+   });
+
    server.post('/api/users/:id/password', async (req, res) => {
       let password_hash = await hash(req.body.password, 10);
       await prisma.user.update({
@@ -118,17 +160,5 @@ registerAPI((server) => {
          },
       });
       send(res, 200, null);
-   });
-
-   server.put('/api/users/:id', async (req, res) => {
-      let data = await readRoles(req.body);
-      console.log(data);
-      let user = await prisma.user.update({
-         where: {
-            id: req.params.id,
-         },
-         data,
-      });
-      send(res, 200, cleanPassword(user));
    });
 });

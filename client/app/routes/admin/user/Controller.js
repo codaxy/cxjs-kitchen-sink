@@ -1,6 +1,6 @@
 import { POST, GET, PUT } from '../../../api/util/methods';
 import { History } from 'cx/ui';
-import { showErrorToast } from '../../../components/toasts';
+import { showErrorToast, showSuccessToast } from '../../../components/toasts';
 
 export default {
    onInit() {
@@ -30,15 +30,26 @@ export default {
       let { id } = this.store.get('$route');
 
       if (invalid) return;
+
+      let mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if(!data.email.match(mailformat)){
+         showErrorToast("You have entered an invalid email address!");
+         return;
+      }
+
       try {
-         if (id == 'new') {
-            let result = await POST('users', data);
-            id = result.id;
+         let result = await POST(`users/${id}`, data);
+         id = result.id;
+
+         if(result.msg) {
+            let action = 'inserted new';
+            if(id!='new') action = 'edited'
+            showSuccessToast(`You have successfully ${action} user.`);
+            History.pushState({}, null, `~/admin/users?select=${id}`);
          } else {
-            await PUT(`users/${id}`, data);
+            showErrorToast("Email must be unique.");
          }
 
-         History.pushState({}, null, `~/admin/users?select=${id}`);
       } catch (err) {
          showErrorToast(err);
       }

@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.0.5 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}} #Must be unique in Heroku
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          #buildpack: 'SOME BUILDPACK' #OPTIONAL
+          #branch: 'DEFAULT' #OPTIONAL and DEFAULT - 'HEAD' (a.k.a your current branch)
+          #dontuseforce: false #OPTIONAL and DEFAULT - false
+          #usedocker: false #OPTIONAL and DEFAULT - false
+          appdir: 'server' #OPTIONAL and DEFAULT - "". This is useful if the api you're deploying is in a subfolder
+          #docker_heroku_process_type: '' #OPTIONAL and DEFAULT - "web"

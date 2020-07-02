@@ -1,9 +1,7 @@
 # CxJS Enterprise Demo
 
 ### Author
-#
 ##### Vladimir Uzelac 
-#
 >Github: [uzelac92](https://github.com/uzelac92)
 #
 

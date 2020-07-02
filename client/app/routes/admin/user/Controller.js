@@ -45,4 +45,3 @@ export default {
       }
    },
 };
-//await GET(`users/email/${data.email}`)

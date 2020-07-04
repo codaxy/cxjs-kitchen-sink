@@ -40,6 +40,7 @@ export default {
             await PUT(`users/${id}`, data);
          }
 
+         this.store.delete('$page.origin');
          History.pushState({}, null, `~/admin/users?select=${id}`);
       } catch (err) {
          showErrorToast(err);

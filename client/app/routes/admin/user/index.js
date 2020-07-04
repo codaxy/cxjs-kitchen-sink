@@ -51,13 +51,13 @@ export default (
                               autoFocus-expr="!{$page.data.id}"
                               class="w-64"
                               validationParams-bind="$page"
-                              onValidate={(v, $page) => {
+                              onValidate={async (v, instance, $page) => {
                                  if ($page.data.id === 'new' || $page.origin !== v) {
                                     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                                     if (!re.test(v)) {
                                        return 'Invalid email structure.';
                                     } else {
-                                       const exists = GET(`users/email/${v}`) != null ? true : false;
+                                       const exists = await GET(`users/email/${v}`) != null ? true : false;
                                        if (exists) {
                                           return 'Email is already taken.';
                                        } else {

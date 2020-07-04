@@ -15,6 +15,7 @@ export default {
          status.set('loading');
          let id = this.store.get('$route.id');
          let data = await GET(`users/${id}`);
+         this.store.set('$page.origin', data.email);
          this.store.set('$page.data', data);
          status.set('ok');
       } catch (err) {

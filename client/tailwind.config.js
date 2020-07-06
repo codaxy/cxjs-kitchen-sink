@@ -1,4 +1,12 @@
 module.exports = {
+   purge: {
+      enabled: true,
+      content: ['./app/**/*.html', './app/**/*.js'],
+      // These options are passed through directly to PurgeCSS
+      options: {
+         whitelist: [],
+      },
+   },
    theme: {
       extend: {
          spacing: {

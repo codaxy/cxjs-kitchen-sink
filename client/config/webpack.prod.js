@@ -48,11 +48,13 @@ module.exports = merge(common, {
          filename: '[name].ltc.[contenthash].css',
          chunkFilename: '[name].ltc.[contenthash].css',
       }),
-      new CopyWebpackPlugin([
-         {
-            from: p('./assets'),
-            to: p('./dist/assets'),
-         },
-      ]),
+      // new CopyWebpackPlugin({
+      //    patterns: [
+      //       {
+      //          from: p('./assets'),
+      //          to: p('./dist/assets'),
+      //       },
+      //    ],
+      // }),
    ],
 });

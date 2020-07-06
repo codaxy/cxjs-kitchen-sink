@@ -1,24 +1,24 @@
-module.exports = {
-   cacheDirectory: true,
-   cacheIdentifier: 'v1',
-   presets: [
-      [
-         'cx-env',
-         {
-            targets: {
-               chrome: 70,
-            },
-            corejs: 3,
-            modules: false,
-            loose: true,
-            useBuiltIns: 'usage',
-            cx: {
-               imports: {
-                  useSrc: true,
+module.exports = function getBabelConfig({ modules }) {
+   return {
+      presets: [
+         [
+            'cx-env',
+            {
+               targets: {
+                  chrome: 70,
+               },
+               corejs: 3,
+               modules: modules,
+               loose: true,
+               useBuiltIns: 'usage',
+               cx: {
+                  imports: {
+                     useSrc: !modules,
+                  },
                },
             },
-         },
+         ],
       ],
-   ],
-   plugins: [],
+      plugins: [],
+   };
 };

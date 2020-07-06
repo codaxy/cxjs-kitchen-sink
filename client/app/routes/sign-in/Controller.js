@@ -10,4 +10,9 @@ export default {
          displayName: 'Test User',
       });
    },
+
+   onChangeLanguage(e, { data }) {
+      let { lang } = data.data;
+      this.store.set('lang', lang);
+   },
 };

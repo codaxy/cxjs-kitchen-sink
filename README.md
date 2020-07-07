@@ -41,7 +41,10 @@ yarn start
 
 ## Recipes
 
-[Recipes](./recipes/README.md) contain some explanations of the more complicated stuff related to CxJS and this project,
+Recipes offer additional explanations related to CxJS and this project in particular. These are currently available recipes:
+
+- [Improved form validation UX using the visited flag](./recipes/improved-validation-ux-using-visited.md)
+- [Automatic deployment to Heroku and Netlify](./recipes/automatic-deployment-to-heroku-and-netlify.md)
 
 ## License
 

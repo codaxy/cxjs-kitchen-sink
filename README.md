@@ -1,6 +1,6 @@
-# CxJS Enterprise Demo
+# CxJS Kitchen Sink
 
-The purpose of this project is to illustrate how CxJS can be used to quickly build enterprise applications. [CxJS](https://cxjs.io) is an advanced JavaScript framework designed for building applications which heavily feature forms, tables, and charts.
+The purpose of this project is to illustrate how CxJS can be used to quickly build enterprise applications. [CxJS](https://github.com/codaxy/cxjs) is an advanced JavaScript framework designed for building applications which heavily feature forms, tables, and charts.
 
 A live demo of this application is available at https://kitchen-sink.cxjs.io.
 

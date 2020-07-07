@@ -39,6 +39,10 @@ yarn install
 yarn start
 ```
 
+## Recipes
+
+[Recipes](./recipes/README.md) contain some explanations of the more complicated stuff related to CxJS and this project,
+
 ## License
 
 This project is available under the [MIT license](LICENSE.md). However please note that CxJS requires paid licenses for commercial distribution.

@@ -4,6 +4,7 @@ import AppLayout from '../layout';
 
 import Admin from './admin';
 import Accounting from './accounting';
+import UnderConstruction from './under-construction';
 
 enableCultureSensitiveFormatting();
 
@@ -16,6 +17,12 @@ export default () => (
          </Route>
          <Route route="~/accounting" url-bind="url" prefix>
             <Accounting />
+         </Route>
+         <Route route="~/crm" url-bind="url" prefix>
+            <UnderConstruction />
+         </Route>
+         <Route route="~/issues" url-bind="url" prefix>
+            <UnderConstruction />
          </Route>
       </PureContainer>
    </cx>

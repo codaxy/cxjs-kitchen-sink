@@ -1,13 +1,25 @@
 import { Toolbar } from '../../../components/Toolbar';
 import { LookupField } from 'cx/widgets';
 import { SwissArmyGrid } from '../../../components/swiss-army-grid/SwissArmyGrid';
+import { GET } from '../../../api/util/methods';
+import Controller from './Controller';
 
-export default (
+export default () => (
    <cx>
-      <div class="flex flex-col flex-grow">
+      <div class="flex flex-col flex-grow" controller={Controller}>
          <Toolbar>
-            Active Ledger
-            <LookupField />
+            Active Ledger:
+            <LookupField
+               onQuery={() => {
+                  return GET('ledgers');
+               }}
+               fetchAll
+               cacheAll
+               optionTextField="name"
+               value-bind="$page.ledgerId"
+               text-bind="$page.ledgerText"
+               required
+            />
          </Toolbar>
          <SwissArmyGrid
             class="flex-grow"

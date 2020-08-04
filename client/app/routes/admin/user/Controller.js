@@ -15,6 +15,7 @@ export default {
          status.set('loading');
          let id = this.store.get('$route.id');
          let data = await GET(`users/${id}`);
+         this.store.set('$page.origin', data.email);
          this.store.set('$page.data', data);
          status.set('ok');
       } catch (err) {
@@ -30,6 +31,7 @@ export default {
       let { id } = this.store.get('$route');
 
       if (invalid) return;
+
       try {
          if (id == 'new') {
             let result = await POST('users', data);
@@ -38,6 +40,7 @@ export default {
             await PUT(`users/${id}`, data);
          }
 
+         this.store.delete('$page.origin');
          History.pushState({}, null, `~/admin/users?select=${id}`);
       } catch (err) {
          showErrorToast(err);

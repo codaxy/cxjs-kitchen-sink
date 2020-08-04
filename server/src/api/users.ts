@@ -67,6 +67,16 @@ registerAPI((server) => {
       send(res, 200, data.map(cleanPassword));
    });
 
+   server.get('/api/users/email/:email', async (req, res) => {
+      let data = await prisma.user.findOne({
+         where: {
+            email: req.params.email,
+         },
+      });
+
+      send(res, 200, data);
+   });
+
    server.get('/api/users/:id', async (req, res) => {
       let data = await prisma.user.findOne({
          where: {

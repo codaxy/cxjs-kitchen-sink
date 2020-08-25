@@ -1,6 +1,6 @@
 import { POST, GET, PUT } from '../../../api/util/methods';
 import { History } from 'cx/ui';
-import { showErrorToast } from '../../../components/toasts';
+import { showErrorToast, showSuccessToast } from '../../../components/toasts';
 
 export default {
    onInit() {
@@ -37,7 +37,7 @@ export default {
          } else {
             await PUT(`users/${id}`, data);
          }
-
+         showSuccessToast('User data successfully saved.');
          History.pushState({}, null, `~/admin/users?select=${id}`);
       } catch (err) {
          showErrorToast(err);

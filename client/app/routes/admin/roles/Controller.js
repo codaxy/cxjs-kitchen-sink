@@ -1,5 +1,6 @@
 import { GET, DELETE, POST, PUT } from '../../../api/util/methods';
 import { History } from 'cx/ui';
+import { showSuccessToast } from '../../../components/toasts';
 
 export default {
    onInit() {
@@ -62,6 +63,7 @@ export default {
          }
          await this.invokeParentMethod('onLoad', !!data.id);
          this.store.set('$page.selection', data.id);
+         showSuccessToast('Role saved.');
       } catch (err) {
          showErrorToast(err);
       }

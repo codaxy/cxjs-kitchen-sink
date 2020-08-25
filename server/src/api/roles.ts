@@ -41,6 +41,8 @@ registerAPI((server) => {
    });
 
    server.put('/api/roles/:id', async (req, res) => {
+      if (req.query.flag) delete req.body.description;
+
       let data = await prisma.role.update({
          where: {
             id: req.params.id,

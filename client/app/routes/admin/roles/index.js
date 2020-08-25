@@ -1,25 +1,23 @@
-import { Toolbar } from '../../../components/Toolbar';
+import { computable, KeySelection, LabelsLeftLayout } from 'cx/ui';
 import {
    Button,
+   Checkbox,
+   FieldGroup,
+   Grid,
    Menu,
    MenuItem,
-   Grid,
-   TextField,
    openContextMenu,
-   Link,
-   FieldGroup,
-   TextArea,
-   Checkbox,
    PrivateStore,
    Repeater,
+   TextArea,
+   TextField,
 } from 'cx/widgets';
-import { KeySelection, History, LabelsLeftLayout, computable } from 'cx/ui';
+import { AsyncButton } from '../../../components/AsyncButton';
+import { LoadingMask } from '../../../components/LoadingMask';
+import { SearchField } from '../../../components/SearchField';
+import { Toolbar } from '../../../components/Toolbar';
 import '../../../util/formatting/relativetime';
 import Controller from './Controller';
-import { LoadingMask } from '../../../components/LoadingMask';
-import { getSearchQueryPredicate } from 'cx/util';
-import { SearchField } from '../../../components/SearchField';
-import { AsyncButton } from '../../../components/AsyncButton';
 import { Permission, permissionGroups } from './permissions';
 
 const toolbarItems = (

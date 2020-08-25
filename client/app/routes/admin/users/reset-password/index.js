@@ -36,7 +36,7 @@ export default () => (
                         autoComplete: 'new-password',
                      }}
                      validationParams-bind="password"
-                     onValidate={(confirm, instance, password) => confirm != password && 'Passwords do not match.'}
+                     //onValidate={(confirm, instance, password) => confirm != password && 'Passwords do not match.'}
                   />
                </LabelsTopLayout>
             </ValidationGroup>

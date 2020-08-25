@@ -207,3 +207,8 @@ $cx-input-tag-state-style-map: cx-deep-map-merge(
 }
 
 @import 'components/index';
+
+.cxb-lookupfield.cxm-nowrap > .cxe-lookupfield-input {
+   flex-wrap: nowrap;
+   white-space: nowrap;
+}

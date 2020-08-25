@@ -59,11 +59,11 @@ export default {
          if (!data.id) {
             data = await POST(`roles`, data);
          } else {
-            await PUT(`roles/${data.id}`, data);
+            await PUT(`roles/${data.id}?flag=1`, data);
          }
          await this.invokeParentMethod('onLoad', !!data.id);
          this.store.set('$page.selection', data.id);
-         showSuccessToast('Role saved.');
+         showSuccessToast('Super user saved.');
       } catch (err) {
          showErrorToast(err);
       }

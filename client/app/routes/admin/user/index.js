@@ -39,7 +39,7 @@ export default (
                               label="Email"
                               required
                               autoFocus-expr="!{$page.data.id}"
-                              class="w-64"
+                              class="w-64 pl-3"
                            />
                            <TextField value-bind="$page.data.display_name" label="Display" required class="w-64" />
                            <LookupField
@@ -52,6 +52,9 @@ export default (
                               cacheAll
                               optionTextField="name"
                               valueTextField="name"
+                              mod="nowrap"
+                              inputClass="test"
+                              inputStyle="white-space: nowrap; flex-wrap: nowrap"
                            />
                         </LabelsLeftLayout>
                      </FieldGroup>

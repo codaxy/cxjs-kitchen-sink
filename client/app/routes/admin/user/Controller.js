@@ -37,7 +37,7 @@ export default {
          } else {
             await PUT(`users/${id}`, data);
          }
-         showSuccessToast('User data successfully saved.');
+         //showSuccessToast('User data successfully saved.');
          History.pushState({}, null, `~/admin/users?select=${id}`);
       } catch (err) {
          showErrorToast(err);

@@ -29,20 +29,20 @@ const toolbarItems = (
       </MenuItem>
       <MenuItem
          autoClose
-         disabled-expr="!{$page.selection}"
-         onClick="onDelete"
-         icon="fa-trash"
-         confirm="Are you sure that you want to delete the selected role?"
-      >
-         Delete Role
-      </MenuItem>
-      <MenuItem
-         autoClose
          disabled-expr="{$page.status} == 'loading'"
          onClick="onLoad"
          icon-expr="{$page.status} == 'loading' ? 'loading' : 'fa-sync-alt'"
       >
          Refresh
+      </MenuItem>
+      <MenuItem
+         autoClose
+         disabled-expr="!{$page.selection}"
+         onClick="onDelete"
+         icon="fa-trash"
+         //confirm="Are you sure that you want to delete the selected role?"
+      >
+         Delete Role
       </MenuItem>
    </cx>
 );
@@ -68,8 +68,9 @@ export default (
                   sortDirection-bind="$page.sort.direction"
                   filterParams-bind="$page.filter.query"
                   onCreateFilter={(query) => {
-                     let sp = getSearchQueryPredicate(query);
-                     return (record) => sp(record.name) || sp(record.description);
+                     //let sp = getSearchQueryPredicate(query);
+                     //return (record) => sp(record.name) || sp(record.description);
+                     return (record) => !query || record.name?.indexOf(query) >= 0;
                   }}
                   emptyText="There is no data matching the given search criteria."
                   columns={[
@@ -120,7 +121,7 @@ export default (
                <PrivateStore data={{ data: { bind: '$page.editor.data' }, visible: { bind: '$page.editor.visible' } }}>
                   <div class="flex border-b p-4">
                      <div>
-                        <div class="">Role</div>
+                        <div class="">Rolle</div>
                         <p class="text-xs text-gray-600"></p>
                      </div>
                      <div class="ml-auto">
@@ -133,14 +134,14 @@ export default (
                                  autoFocus-expr="!{data.id}"
                                  class="w-64"
                               />
-                              <TextArea value-bind="data.description" label="Description" class="w-64" />
+                              <TextArea value-bind="data.description" label="Desciption" class="w-64" />
                            </LabelsLeftLayout>
                         </FieldGroup>
                      </div>
                   </div>
                   <div class="border-b p-4 flex">
                      <div>
-                        <div class="">Permissions</div>
+                        <div class="">permissions</div>
                         <p class="text-xs text-gray-600"></p>
                      </div>
                      <div class="ml-auto text-sm inline-block">

@@ -14,8 +14,8 @@ module.exports = merge(common, {
    output: {
       path: p("dist"),
       publicPath: "/",
-      filename: "[name].ltc.[chunkhash].js",
-      chunkFilename: "[name].ltc.[chunkhash].js",
+      filename: "[name].ltc.[contenthash].js",
+      chunkFilename: "[name].ltc.[contenthash].js",
       hashDigestLength: 6
    },
 
@@ -46,8 +46,8 @@ module.exports = merge(common, {
          "process.env.NODE_ENV": JSON.stringify("production")
       }),
       new MiniCssExtractPlugin({
-         filename: "[name].ltc.[hash].css",
-         chunkFilename: "[name].ltc.[hash].css"
+         filename: "[name].ltc.[contenthash].css",
+         chunkFilename: "[name].ltc.[contenthash].css"
       })
    ]
 });

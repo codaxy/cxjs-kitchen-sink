@@ -1,7 +1,8 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
-const babelCfg = require("./babel.config");
+const getBabelConfig = require("./babel.config");
 const p = p => path.join(__dirname, "../", p) || "";
+const { merge } = require('webpack-merge');
 
 
 module.exports = {
@@ -17,7 +18,7 @@ module.exports = {
             include: /[\\\/](app|cx|cx-react|cx-theme-\w*)[\\\/]/,
             use: {
                loader: "babel-loader",
-               options: babelCfg
+               options: merge(getBabelConfig({ modules: false }), { cacheDirectory: true, cacheIdentifier: "v1" })
             }
          },
          {

@@ -5,7 +5,7 @@ module.exports = function getBabelConfig({ modules }) {
             'cx-env',
             {
                targets: {
-                  chrome: 70,
+                  chrome: 70
                },
                corejs: 3,
                modules: modules,
@@ -19,6 +19,6 @@ module.exports = function getBabelConfig({ modules }) {
             },
          ],
       ],
-      plugins: [],
+      plugins: []
    };
 };

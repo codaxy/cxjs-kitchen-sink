@@ -1,6 +1,7 @@
-const webpack = require('webpack'),
-   merge = require('webpack-merge'),
-   common = require('./webpack.config');
+const webpack = require('webpack');
+const { merge } = require('webpack-merge');
+const common = require('./webpack.config');
+const tailwindcss = require('tailwindcss')
 
 module.exports = merge(common, {
    mode: 'development',
@@ -9,28 +10,28 @@ module.exports = merge(common, {
       rules: [
          {
             test: /\.scss$/,
-            loaders: ['style-loader', 'css-loader', 'sass-loader'],
+            use: ["style-loader", "css-loader", "sass-loader"]
          },
          {
             test: /\.css$/,
-            loaders: [
-               'style-loader',
+            use: ["style-loader", "css-loader",
                {
-                  loader: 'postcss-loader',
+                  loader: 'postcss-loader', // postcss loader needed for tailwindcss
                   options: {
-                     ident: 'postcss',
-                     plugins: [require('tailwindcss')],
+                     postcssOptions: {
+                        ident: 'postcss',
+                        plugins: [tailwindcss],
+                     },
                   },
-               },
-            ],
-         },
-      ],
+               },],
+         }
+      ]
    },
 
-   plugins: [new webpack.HotModuleReplacementPlugin()],
+   plugins: [],
 
    output: {
-      publicPath: 'http://localhost:8765/',
+      publicPath: '/',
    },
 
    devtool: 'eval',

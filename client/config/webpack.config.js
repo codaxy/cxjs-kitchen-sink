@@ -18,7 +18,7 @@ module.exports = {
             include: /[\\\/](app|cx|cx-react|cx-theme-\w*)[\\\/]/,
             use: {
                loader: "babel-loader",
-               options: merge(getBabelConfig({ modules: false }), { cacheDirectory: true, cacheIdentifier: "v1" })
+               options: { cacheDirectory: true, cacheIdentifier: "v1", ...getBabelConfig({ modules: false }) }
             }
          },
          {

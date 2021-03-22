@@ -10,6 +10,7 @@ const tailwindcss = require('tailwindcss')
 
 module.exports = merge(common, {
    mode: 'production',
+   target: ['web', 'es5'],
 
    output: {
       path: p("dist"),
